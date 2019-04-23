@@ -8,7 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
     registered_at = serializers.DateTimeField(
         format='%H:%M %d.%m.%Y', read_only=True)
     full_name = serializers.SerializerMethodField(read_only=True)
-    short_name = serializers.SerializerMethodField(read_only=True)
 
     def get_full_name(self, obj):
         return obj.full_name
@@ -18,7 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'email',
             'full_name',
-            'short_name',
             'registered_at']
 
 

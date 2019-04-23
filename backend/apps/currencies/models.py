@@ -66,3 +66,45 @@ class CurrencyRatio(models.Model):
         decimal_places=4,
         verbose_name='Ratio of linked currencies'
     )
+
+
+
+
+
+# Making sure that there is only one
+# default currency of the entire platform
+def SecurePlatformOnlyOneDefaultCurrencyAllowed(sender,
+    instance,
+    created,
+    raw,
+    using,
+    update_fields,
+    **kwargs):
+        try:
+            '''
+            If currently operated intance
+            is defined as a default currency
+            of this system,
+            we have to set this field as "False" for each and every other currency
+            '''
+            if(
+                instance.defaultSystemCurrency == True
+            ):
+                # Creating a BULK opreration
+                Currency.objects.all().exclude(id=instance.id).update(
+                    defaultSystemCurrency=False
+                )
+
+            instance.save()
+
+        except Exception as e:
+            logger.error(
+                '[*** TRIGGER ***] [ ERROR ] [ CreateCompany ]'
+                +
+                'Problem: exception occured during the process of creating Company object and linking it to the newly create Owner account'
+                + 'error: ' + str(e)
+            )
+
+
+
+post_save.connect(SecurePlatformOnlyOneDefaultCurrencyAllowed, sender=Currency)
