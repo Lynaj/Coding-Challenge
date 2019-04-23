@@ -51,9 +51,7 @@ export const initializeTransfer = ({ commit, state }, data) => {
         }
       }
     ).then(response => {
-      if (response.status == 200) {
-        resolve(response);
-      }
+      resolve(response);
     })
     .catch(error => {
       reject(response);

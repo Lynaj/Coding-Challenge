@@ -220,6 +220,14 @@
                 this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
                   this.$router.push('/');
                 })
+              // Lack of funds
+              } else if (response.status == 409) {
+                this.$swal('You do not own enough amount of money to process this transfer');
+              }
+              // Pair cannot be exchanged
+              // Liquidity is has not been provided
+              else if (response.status == 406) {
+                this.$swal('It is impossible to exchange given pair of currencies');
               } else if (response.response.status == 401) {
                 let payload = {
                   router: this.$router,

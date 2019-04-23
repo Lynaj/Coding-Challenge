@@ -219,13 +219,23 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     Fetching the ratio of 
                     parsed currencies
                 '''
-                transactionRatio = get_object_or_404(
-                    CurrencyRatio.objects.all(),
+                queriedRatio = CurrencyRatio.objects.filter(
                     fromCurrency=fromCurrency,
                     toCurrency=toCurrency
-                ).ratio
+                )
 
-                logger.error('1' + str(fourthCond))
+                if(queriedRatio.count() == 1):
+                    transactionRatio = queriedRatio[0].ratio
+                else:
+                    '''
+                        In order to make the user sure
+                        that it is the mistake made
+                        by our platform itself / provider of the
+                        liquidity
+                    '''
+                    return Response(
+                        status=status.HTTP_406_NOT_ACCEPTABLE
+                    )
 
             createdTransaction = Transaction.objects.create(
                 recipient=toUser,
