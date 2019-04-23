@@ -8,8 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 import uuid
 
-from backend.apps.misc.logger import *
-from backend.apps.currencies.choices import *
+from apps.misc.logger import *
+from apps.currencies.choices import *
 
 # +++++++++++++++++++++++++++++++++++
 logger = logging.getLogger(__name__)
@@ -27,8 +27,8 @@ class Currency(models.Model):
     )
 
     abbreviation = models.CharField(
-        choices=CURRENCY_TYPE,
-        default=next(iter(CURRENCY_TYPE))[1],
+        # choices=CURRENCY_TYPE,
+        default="",
         max_length=30,
         null=False,
         verbose_name='Abbreviation of the currency'
@@ -46,7 +46,8 @@ class CurrencyRatio(models.Model):
         null=False,
         blank=False,
         on_delete=models.CASCADE,
-        verbose_name='First currency of the relation'
+        verbose_name='First currency of the relation',
+        related_name="currency_ratio_from_currency"
     )
 
     toCurrency = models.ForeignKey(
@@ -54,7 +55,8 @@ class CurrencyRatio(models.Model):
         null=False,
         blank=False,
         on_delete=models.CASCADE,
-        verbose_name='Second currency of the relation'
+        verbose_name='Second currency of the relation',
+        related_name="currency_ratio_to_currency"
     )
 
     ratio = models.DecimalField(

@@ -37,6 +37,9 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'apps.users',
+    'apps.transactions',
+    'apps.currencies',
+    'apps.clients'
 ]
 
 

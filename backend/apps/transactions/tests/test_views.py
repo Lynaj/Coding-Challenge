@@ -11,15 +11,14 @@ import json
 import os
 import codecs
 
-from backend.apps.currencies.models import *
-from backend.apps.users.models import *
-from backend.apps.transactions.models import *
-from backend.apps.clients.models import *
+from apps.currencies.models import *
+from apps.users.models import *
+from apps.transactions.models import *
+from apps.clients.models import *
 
-from backend.apps.currencies.choices import CURRENCY_TYPE
+from apps.currencies.choices import CURRENCY_TYPE
 
-from backend.misc.logger import *
-from backend.apps.misc.authentication import *
+from misc.logger import *
 
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
@@ -37,18 +36,19 @@ class CompanyViewSetTestCase(APITestCase):
         '''
 
 
-        urrencyIterator = iter(CURRENCY_TYPE)
+        currencyIterator = iter(CURRENCY_TYPE)
         for currencies in range(len(CURRENCY_TYPE)):
+            nextCurrency = next(currencyIterator)
             if (currencies == 0):
                 Currency.objects.create(
-                    name=next(currencyIterator)[0],
-                    abbreviation=next(currencyIterator)[1]
+                    name=nextCurrency[0],
+                    abbreviation=nextCurrency[1],
+                    defaultSystemCurrency=True
                 )
             else:
                 Currency.objects.create(
-                    name=next(currencyIterator)[0],
-                    abbreviation=next(currencyIterator)[1],
-                    defaultSystemCurrency=True
+                    name=nextCurrency[0],
+                    abbreviation=nextCurrency[1]
                 )
 
         self.queriedCurrencies = Currency.objects.all()
@@ -59,7 +59,7 @@ class CompanyViewSetTestCase(APITestCase):
             '''
         self.assertEqual(
             self.queriedCurrencies.count(),
-            range(len(CURRENCY_TYPE))
+            len(CURRENCY_TYPE)
         )
 
         '''
@@ -73,7 +73,7 @@ class CompanyViewSetTestCase(APITestCase):
         test_last_name__second_user = "Peter"
 
         test_email__first_user= "johnymarge1@wp.pl"
-        test_email__second_user= "johnymarge1@wp.pl"
+        test_email__second_user= "johnymar123ge1@wp.pl"
 
         test_password__first_user = "ij43i$#@"
         test_password__second_user= "ij43i$#@"
@@ -123,8 +123,8 @@ class CompanyViewSetTestCase(APITestCase):
             userObject=self.test_second_user
         )
 
-        self.assertEqual(self.test_first_user.count(), 1)
-        self.assertEqual(self.test_second_user.count(), 1)
+        self.assertEqual(self.test_first_user_client_object.count(), 1)
+        self.assertEqual(self.test_second_user_client_object.count(), 1)
 
         verification_url = reverse('api-jwt-verify')
         resp = self.client.post(verification_url, {'token': self.token}, format='json')
@@ -138,6 +138,8 @@ class CompanyViewSetTestCase(APITestCase):
 
     def test_fully_working_transfer__different_currencies_different_users(self):
         transferValue = 1000.0
+        test_ratio = 1.1
+
         # Making sure user has enough funds
         queriedSenderBalance = ClientBalance.objects.filter(
             balanceOwner=self.test_first_user_client_object[0],
@@ -163,11 +165,24 @@ class CompanyViewSetTestCase(APITestCase):
             0.0
         )
 
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency = self.queriedCurrencies[0],
+            toCurrency = self.queriedCurrencies[1],
+            ratio=test_ratio
+        )
+
+
         # Creating a request
         test_payload = {
-            "fromCurrency": self.queriedCurrencies[0],
-            "toCurrency": self.queriedCurrencies[1],
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[1].abbreviation,
             "toUser": self.test_second_user.email,
+            "transactionValue": transferValue
         }
 
         response = self.client.post(
@@ -180,8 +195,8 @@ class CompanyViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
         # Refreshing querysets
-        queriedSenderBalance.refresh_from_db()
-        queriedRecipientBalance.refresh_from_db()
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
 
         # Making sure that the transfer took a place
         self.assertEqual(
@@ -191,21 +206,21 @@ class CompanyViewSetTestCase(APITestCase):
 
         self.assertEqual(
             queriedRecipientBalance[0].balanceValue,
-            transferValue
+            test_ratio*transferValue
         )
 
 
-    def test_fully_working_transfer__different_currencies_same_user(self):
+    def TTtest_fully_working_transfer__different_currencies_same_user(self):
         raise NotImplementedError()
 
-    def test_fully_working_transfer__same_currencies_same_user(self):
+    def TTtest_fully_working_transfer__same_currencies_same_user(self):
         raise NotImplementedError()
 
-    def test_lack_of_funds_error__same_currencies_same_user(self):
+    def TTtest_lack_of_funds_error__same_currencies_same_user(self):
         raise NotImplementedError()
 
-    def test_lack_of_funds_error__different_currencies_same_user(self):
+    def TTtest_lack_of_funds_error__different_currencies_same_user(self):
         raise NotImplementedError()
 
-    def test_lack_of_funds_error__different_currencies_different_users(self):
+    def TTtest_lack_of_funds_error__different_currencies_different_users(self):
         raise NotImplementedError()

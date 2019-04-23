@@ -9,10 +9,9 @@ from django.utils import timezone
 import uuid
 
 from apps.clients.models import Client
-from apps.exchange.models import ExchangeRate
 from apps.currencies.models import Currency, CurrencyRatio
 
-from backend.apps.misc.logger import *
+from apps.misc.logger import *
 from apps.transactions.choices import TransactionStatusChoices
 
 # +++++++++++++++++++++++++++++++++++
@@ -25,29 +24,33 @@ class Transaction(models.Model):
     recipient = models.ForeignKey(
         Client,
         null=False,
-        on_delete=models.SET_NULL,
-        verbose_name='Recipient of the transaction'
+        on_delete=models.CASCADE,
+        verbose_name='Recipient of the transaction',
+        related_name="transaction_recipient"
     )
 
     sender = models.ForeignKey(
         Client,
         null=False,
-        on_delete=models.SET_NULL,
-        verbose_name='Creator of the transaction'
+        on_delete=models.CASCADE,
+        verbose_name='Creator of the transaction',
+        related_name='transaction_sender'
     )
 
     fromCurrency = models.ForeignKey(
         Currency,
         null=False,
-        on_delete=models.SET_NULL,
-        verbose_name='From currency of the transaction'
+        on_delete=models.CASCADE,
+        verbose_name='From currency of the transaction',
+        related_name="transaction_from_currency"
     )
 
     toCurrency = models.ForeignKey(
         Currency,
         null=False,
-        on_delete=models.SET_NULL,
-        verbose_name='Tocurrency of the transaction'
+        on_delete=models.CASCADE,
+        verbose_name='Tocurrency of the transaction',
+        related_name="transaction_to_currency"
     )
 
     value = models.DecimalField(

@@ -37,9 +37,9 @@ from rest_framework.authentication import BasicAuthentication
 from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
 from rest_framework import filters
 
-from backend.apps.clients.models import *
-from backend.apps.clients.serializers import *
-from backend.apps.misc.logger import *
+from apps.clients.models import *
+from apps.clients.serializers import *
+from apps.misc.logger import *
 
 from django.db.models import Q
 

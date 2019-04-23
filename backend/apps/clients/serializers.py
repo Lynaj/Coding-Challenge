@@ -6,8 +6,8 @@ from generic_relations.relations import GenericRelatedField
 
 from datetime import date
 
-from backend.apps.clients.models import *
-from backend.apps.misc.logger import *
+from apps.clients.models import *
+from apps.misc.logger import *
 
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)

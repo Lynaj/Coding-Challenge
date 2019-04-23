@@ -9,6 +9,8 @@ from uuid import uuid4
 import io as BytesIO
 from base64 import b64decode
 
+from decimal import *
+
 from django.db import models
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -37,16 +39,16 @@ from rest_framework.authentication import BasicAuthentication
 from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
 from rest_framework import filters
 
-from backend.apps.transactions.models import *
-from backend.apps.transactions.serializers import *
+from apps.transactions.models import *
+from apps.transactions.serializers import *
 
-from backend.apps.transactions.choices import TransactionStatusChoices
+from apps.transactions.choices import TransactionStatusChoices
 
-from backend.apps.currencies.choices import CURRENCY_TYPE
-from backend.apps.currencies.models import Currency, CurrencyRatio
+from apps.currencies.choices import CURRENCY_TYPE
+from apps.currencies.models import Currency, CurrencyRatio
 
-from backend.apps.clients.models import Client, ClientBalance
-from backend.apps.misc.logger import *
+from apps.clients.models import Client, ClientBalance
+from apps.misc.logger import *
 
 from django.db.models import Q
 
@@ -145,12 +147,13 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     r"^\d\d*[.]?\d*$", str(transactionValue)
                 )
             ):
-
+                transactionValue = Decimal(transactionValue)
                 # Querying proper currency objects
                 fromCurrency = get_object_or_404(
                     Currency.objects.all(),
                     abbreviation=fromCurrency
                 )
+
                 toCurrency=get_object_or_404(
                     Currency.objects.all(),
                     abbreviation=toCurrency
@@ -160,7 +163,7 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                 toUser = get_object_or_404(
                     Client.objects.all(),
                     userObject=get_object_or_404(
-                        Client.objects.all(),
+                        User.objects.all(),
                         email=toUser
                     )
                 )
@@ -169,16 +172,21 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                 Quering balance denoted in the currency
                 delivered by the user
                 '''
+
+                # fromCurrencyFrnated = list(filter(lambda x: x[1] == fromCurrency, CURRENCY_TYPE))[0]
+
+                # queriedCurrency = get_object_or_404(
+                #     Currency.objects.all(),
+                    # abbreviation=fromCurrency
+                # )
+
                 queriedSenderBalance = ClientBalance.objects.filter(
                     balanceOwner=fromUser,
-                    balanceCurrency=get_object_or_404(
-                        Currency.objects.all(),
-                        abbreviation=fromCurrency
-                    )
+                    balanceCurrency=fromCurrency
                 )
 
+
                 createdTransaction = Transaction.objects.create(
-                    commit=False,
                     recipient=toUser,
                     sender=fromUser,
                     fromCurrency=fromCurrency,
@@ -188,7 +196,8 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                 )
 
                 # Determining, whether user has enough funds
-                if(queriedSenderBalance.balanceValue < transactionValue):
+                if(queriedSenderBalance[0].balanceValue < transactionValue):
+
 
                     '''
                     Creating transaction object without moving any funds
@@ -207,16 +216,19 @@ class TransactionsViewSet(viewsets.ModelViewSet):
 
                 else:
                     # Updating sender's balance
-                    queriedSenderBalance.balanceValue -= transactionValue
-                    queriedSenderBalance.save()
+                    queriedSenderBalance.update(
+                        balanceValue = (
+                            Decimal(
+                                transactionValue
+                            )- queriedSenderBalance[0].balanceValue
+                        )
+                    )
+                    # queriedSenderBalance[0].save()
 
                     # Updating recipient's balance
                     queriedRecipientBalance = ClientBalance.objects.filter(
                        balanceOwner=toUser,
-                       balanceCurrency=get_object_or_404(
-                           Currency.objects.all(),
-                           abbreviation=toCurrency
-                       )
+                       balanceCurrency=toCurrency
                     )
 
 
@@ -238,8 +250,13 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     )
                     createdTransaction.save()
 
-                    queriedRecipientBalance.balanceValue += transactionValue
-                    queriedRecipientBalance.save()
+                    queriedRecipientBalance.update(
+                        balanceValue=(
+                            Decimal(
+                                transactionValue
+                            ) + queriedRecipientBalance[0].balanceValue
+                        )
+                    )
 
                     return Response(
                         status=status.HTTP_200_OK

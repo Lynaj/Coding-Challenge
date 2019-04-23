@@ -8,9 +8,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 import uuid
 
-from backend.apps.users.models import User
-from backend.apps.currencies.models import Currency
-from backend.apps.misc.logger import *
+from apps.users.models import User
+from apps.currencies.models import Currency
+from apps.misc.logger import *
+
+import environ
 
 env = environ.Env()
 
@@ -116,7 +118,8 @@ def CreateBasicCurrencyStack(sender,
                 balanceValue = 0
 
                 if(currency.defaultSystemCurrency):
-                    balanceValue = env.bool('DEFAULT_CURRENCY_VALUE')
+                    balanceValue = 1000
+                        # env.bool('DEFAULT_CURRENCY_VALUE')
 
                 ClientBalance.objects.create(
                     balanceOwner=instance,
@@ -159,7 +162,7 @@ def CreateBasicClientObject(sender,
             if(queriedNativeSystemCurrency.count() == 1):
                 Client.objects.create(
                     userObject=instance,
-                    nativeAccountCurrenc=queriedNativeSystemCurrency[0]
+                    nativeAccountCurrency=queriedNativeSystemCurrency[0]
                 )
             else:
                 raise Exception("Default currency of the system is not valid.")
@@ -167,11 +170,11 @@ def CreateBasicClientObject(sender,
 
         except Exception as e:
             logger.error(
-                '[*** TRIGGER ***] [ ERROR ] [ CreateBasicCurrencyStack ] '
+                '[*** TRIGGER ***] [ ERROR ] [ CreateBasicClientObject ] '
                 +
                 'Problem: exception occured during the process of creating ClientBalance'
                 + 'error: ' + str(e)
             )
 
 post_save.connect(CreateBasicCurrencyStack, sender=Client)
-post_save.connect(CreateBasicClientObject, sender=Client)
+post_save.connect(CreateBasicClientObject, sender=User)
