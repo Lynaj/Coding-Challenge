@@ -147,7 +147,13 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     r"^\d\d*[.]?\d*$", str(transactionValue)
                 )
             ):
-                transactionValue = Decimal(transactionValue)
+                transactionValue = Decimal(
+                    round(
+                        transactionValue
+                        ,
+                        2
+                    )
+                )
                 # Querying proper currency objects
                 fromCurrency = get_object_or_404(
                     Currency.objects.all(),
@@ -195,8 +201,12 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     exchangeRate=0.0,
                 )
 
+
                 # Determining, whether user has enough funds
-                if(queriedSenderBalance[0].balanceValue < transactionValue):
+                if(
+                    queriedSenderBalance[0].balanceValue < transactionValue
+                    or transactionValue <= 0
+                ):
 
 
                     '''
@@ -230,6 +240,7 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                        balanceOwner=toUser,
                        balanceCurrency=toCurrency
                     )
+
 
 
                     '''

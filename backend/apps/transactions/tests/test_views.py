@@ -135,7 +135,6 @@ class CompanyViewSetTestCase(APITestCase):
 
         self.client = APIClient()
 
-
     def test_fully_working_transfer__different_currencies_different_users(self):
         transferValue = 1000.0
         test_ratio = 1.1
@@ -209,18 +208,512 @@ class CompanyViewSetTestCase(APITestCase):
             test_ratio*transferValue
         )
 
+    def test_fully_working_transfer__different_currencies_same_user(self):
+        transferValue = 1000.0
+        test_ratio = 1.1
 
-    def TTtest_fully_working_transfer__different_currencies_same_user(self):
-        raise NotImplementedError()
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
 
-    def TTtest_fully_working_transfer__same_currencies_same_user(self):
-        raise NotImplementedError()
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[1]
+        )
 
-    def TTtest_lack_of_funds_error__same_currencies_same_user(self):
-        raise NotImplementedError()
+        queriedSenderBalance.update(
+            balanceValue=transferValue
+        )
 
-    def TTtest_lack_of_funds_error__different_currencies_same_user(self):
-        raise NotImplementedError()
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
 
-    def TTtest_lack_of_funds_error__different_currencies_different_users(self):
-        raise NotImplementedError()
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[1],
+            ratio=test_ratio
+        )
+
+        # Creating a request
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[1].abbreviation,
+            "toUser": self.test_first_user.email,
+            "transactionValue": transferValue
+        }
+
+        response = self.client.post(
+            self.url,
+            data=test_payload,
+            format='json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Refreshing querysets
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
+
+        # Making sure that the transfer took a place
+        self.assertEqual(
+            queriedSenderBalance[0].balanceValue,
+            0.0
+        )
+
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            test_ratio * transferValue
+        )
+
+    def test_fully_working_transfer__same_currencies_same_user(self):
+        transferValue = 1000.0
+        test_ratio = 1.1
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue=transferValue
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            transferValue
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[0],
+            ratio=test_ratio
+        )
+
+        # Creating a request
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[0].abbreviation,
+            "toUser": self.test_first_user.email,
+            "transactionValue": transferValue
+        }
+
+        response = self.client.post(
+            self.url,
+            data=test_payload,
+            format='json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        # Refreshing querysets
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
+
+        # Making sure that the transfer took a place
+        self.assertEqual(
+            queriedSenderBalance[0].balanceValue,
+            transferValue
+        )
+
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            transferValue
+        )
+
+    def test_lack_of_funds_error__same_currencies_same_user(self):
+        transferValue = 1000.0
+        test_ratio = 1.1
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue=0.0
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[0],
+            ratio=test_ratio
+        )
+
+        # Creating a request
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[0].abbreviation,
+            "toUser": self.test_first_user.email,
+            "transactionValue": transferValue
+        }
+
+        response = self.client.post(
+            self.url,
+            data=test_payload,
+            format='json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
+
+        self.assertEqual(response.status_code, 409)
+
+        # Refreshing querysets
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
+
+        # Making sure that the transfer took a place
+        self.assertEqual(
+            queriedSenderBalance[0].balanceValue,
+            0.0
+        )
+
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+    def test_lack_of_funds_error__different_currencies_same_user(self):
+
+        transferValue = 1000.0
+        test_ratio = 1.1
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[1]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue=0.0
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[1],
+            ratio=test_ratio
+        )
+
+        # Creating a request
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[1].abbreviation,
+            "toUser": self.test_first_user.email,
+            "transactionValue": transferValue
+        }
+
+        response = self.client.post(
+            self.url,
+            data=test_payload,
+            format='json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
+
+        self.assertEqual(response.status_code, 409)
+
+        # Refreshing querysets
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
+
+        # Making sure that the transfer took a place
+        self.assertEqual(
+            queriedSenderBalance[0].balanceValue,
+            0.0
+        )
+
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+    def test_lack_of_funds_error__different_currencies_different_users(self):
+        transferValue = 1000.0
+        test_ratio = 1.1
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_second_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[1]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue = 0.0
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency = self.queriedCurrencies[0],
+            toCurrency = self.queriedCurrencies[1],
+            ratio=test_ratio
+        )
+
+
+        # Creating a request
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[1].abbreviation,
+            "toUser": self.test_second_user.email,
+            "transactionValue": transferValue
+        }
+
+        response = self.client.post(
+            self.url,
+            data=test_payload,
+            format='json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
+
+        self.assertEqual(response.status_code, 409)
+
+        # Refreshing querysets
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
+
+        # Making sure that the transfer took a place
+        self.assertEqual(
+            queriedSenderBalance[0].balanceValue,
+            0.0
+        )
+
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+    def test_negative_transfer_value_positive_balance_of_sender__different_currencies_different_users(self):
+        transferValue = -1000.0
+        balanceOfSender = 1000.0
+        test_ratio = 1.1
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_second_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[1]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue = balanceOfSender
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency = self.queriedCurrencies[0],
+            toCurrency = self.queriedCurrencies[1],
+            ratio=test_ratio
+        )
+
+
+        # Creating a request
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[1].abbreviation,
+            "toUser": self.test_second_user.email,
+            "transactionValue": transferValue
+        }
+
+        response = self.client.post(
+            self.url,
+            data=test_payload,
+            format='json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+        # Refreshing querysets
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
+
+        # Making sure that the transfer took a place
+        self.assertEqual(
+            queriedSenderBalance[0].balanceValue,
+            balanceOfSender
+        )
+
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+    def test_large_float_points_attack__different_currencies_different_users(self):
+        transferValue = 0.000001
+        balanceOfSender = 1000.0
+        test_ratio = 1.1
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_second_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[1]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue = balanceOfSender
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency = self.queriedCurrencies[0],
+            toCurrency = self.queriedCurrencies[1],
+            ratio=test_ratio
+        )
+
+
+        # Creating a request
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[1].abbreviation,
+            "toUser": self.test_second_user.email,
+            "transactionValue": transferValue
+        }
+
+        response = self.client.post(
+            self.url,
+            data=test_payload,
+            format='json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+        # Refreshing querysets
+        queriedSenderBalance[0].refresh_from_db()
+        queriedRecipientBalance[0].refresh_from_db()
+
+        # Making sure that the transfer took a place
+        self.assertEqual(
+            queriedSenderBalance[0].balanceValue,
+            balanceOfSender
+        )
+
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            0.0
+        )
