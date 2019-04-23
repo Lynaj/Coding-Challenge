@@ -36,11 +36,18 @@ class Transaction(models.Model):
         verbose_name='Creator of the transaction'
     )
 
-    currency = models.ForeignKey(
+    fromCurrency = models.ForeignKey(
         Currency,
         null=False,
         on_delete=models.SET_NULL,
-        verbose_name='Base currency of the transaction'
+        verbose_name='From currency of the transaction'
+    )
+
+    toCurrency = models.ForeignKey(
+        Currency,
+        null=False,
+        on_delete=models.SET_NULL,
+        verbose_name='Tocurrency of the transaction'
     )
 
     value = models.DecimalField(
@@ -48,7 +55,7 @@ class Transaction(models.Model):
         max_digits=190,
         null=False,
         decimal_places=4,
-        verbose_name='Value of the transaction denoted in the given currency'
+        verbose_name='Value of the transaction denoted in from currency'
     )
 
     exchangeRate = models.DecimalField(
@@ -62,6 +69,14 @@ class Transaction(models.Model):
     created_at = models.DateTimeField(
         verbose_name='Created at',
         auto_now_add=timezone.now
+    )
+
+    transactionStatusChoices = models.CharField(
+        choices=TransactionStatusChoices,
+        default=next(iter(TransactionStatusChoices))[0],
+        max_length=300,
+        null=False,
+        verbose_name='Status of the transaction'
     )
 
     updated_at = models.DateTimeField(

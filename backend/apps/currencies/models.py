@@ -9,6 +9,7 @@ from django.utils import timezone
 import uuid
 
 from backend.apps.misc.logger import *
+from backend.apps.currencies.choices import *
 
 # +++++++++++++++++++++++++++++++++++
 logger = logging.getLogger(__name__)
@@ -18,12 +19,16 @@ logger.addHandler(handler)
 
 class Currency(models.Model):
     name = models.CharField(
+        choices=CURRENCY_TYPE,
+        default=next(iter(CURRENCY_TYPE))[0],
         max_length=300,
         null=False,
         verbose_name='Name of the currency'
     )
 
     abbreviation = models.CharField(
+        choices=CURRENCY_TYPE,
+        default=next(iter(CURRENCY_TYPE))[1],
         max_length=30,
         null=False,
         verbose_name='Abbreviation of the currency'
@@ -36,7 +41,7 @@ class Currency(models.Model):
 
 
 class CurrencyRatio(models.Model):
-    firstCurrency = models.ForeignKey(
+    fromCurrency = models.ForeignKey(
         Currency,
         null=False,
         blank=False,
@@ -44,7 +49,7 @@ class CurrencyRatio(models.Model):
         verbose_name='First currency of the relation'
     )
 
-    secondCurrency = models.ForeignKey(
+    toCurrency = models.ForeignKey(
         Currency,
         null=False,
         blank=False,
