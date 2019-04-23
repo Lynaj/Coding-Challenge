@@ -8,6 +8,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 import uuid
 
+from backend.apps.misc.logger import *
+
 # +++++++++++++++++++++++++++++++++++
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
@@ -52,5 +54,3 @@ class CurrencyRatio(models.Model):
         decimal_places=4,
         verbose_name='Ratio of linked currencies'
     )
-
-

@@ -12,7 +12,7 @@ from apps.clients.models import Client
 from apps.exchange.models import ExchangeRate
 from apps.currencies.models import Currency, CurrencyRatio
 
-
+from backend.apps.misc.logger import *
 from apps.transactions.choices import TransactionStatusChoices
 
 # +++++++++++++++++++++++++++++++++++
