@@ -221,12 +221,12 @@
                   this.$router.push('/');
                 })
               // Lack of funds
-              } else if (response.status == 409) {
+              } else if (response.response.status == 409 || response.status == 409) {
                 this.$swal('You do not own enough amount of money to process this transfer');
               }
               // Pair cannot be exchanged
               // Liquidity is has not been provided
-              else if (response.status == 406) {
+              else if (response.response.status == 406 || response.status == 409) {
                 this.$swal('It is impossible to exchange given pair of currencies');
               } else if (response.response.status == 401) {
                 let payload = {
@@ -235,39 +235,23 @@
                 };
                 store.dispatch('informUserNotLoggedIn', payload);
               } else {
-                // Building error message
-                var wrapper = document.createElement('div');
-
-                for (var property in response.response.data.offer) {
-                  if (response.response.data.offer.hasOwnProperty(property)) {
-                    if (response.response.data.offer[property][0] !== undefined) {
-                      var fieldName = property.replace(/.+_/g, "");
-                      wrapper.innerHTML += (fieldName.charAt(0).toUpperCase() + fieldName.substring(1) + ': ' + response.response.data.offer[property][0] + '<br>');
-                    }
-                  }
-                }
-
-                this.$swal(
-                  {
-                    text: "Something went wrong!:",
-                    content: wrapper
-                  }
-                );
+                this.$swal('Something went wrong');
               }
               self.loading = false;
               self.METHOD_resetCurrentView()
             }).catch(error => {
-
-              // Building error message
-              var wrapper = document.createElement('div');
-              wrapper.innerHTML = error;
-
-              this.$swal(
-                {
-                  text: "Something aawent wrong!:",
-                  content: wrapper
-                }
-              );
+                // console.log('responseresponseresponseresponse: ' + JSON.stringify(error));
+                // // Building error message
+                // if (error.response.status == 409 || error.status == 409) {
+                //   this.$swal('You do not own enough amount of money to process this transfer');
+                // }
+                // // Pair cannot be exchanged
+                // // Liquidity is has not been provided
+                // else if (error.response.status == 406 || error.status == 409) {
+                //   this.$swal('It is impossible to exchange given pair of currencies');
+                // } else {
+              this.$swal('Something went wrong');
+                // }
 
               self.METHOD_resetCurrentView();
             })

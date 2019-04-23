@@ -54,7 +54,7 @@ export const initializeTransfer = ({ commit, state }, data) => {
       resolve(response);
     })
     .catch(error => {
-      reject(response);
+      reject(error);
     });
 }
 

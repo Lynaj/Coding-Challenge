@@ -163,6 +163,8 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     2
                 )
             )
+            logger.error("ASDASDASDASDASDASDASDASDASDASDASDASDASDASDASDASDASDASD")
+
             # Querying proper currency objects
             fromCurrency = get_object_or_404(
                 Currency.objects.all(),
