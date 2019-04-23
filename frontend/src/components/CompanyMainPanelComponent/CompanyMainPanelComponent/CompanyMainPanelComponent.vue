@@ -1,0 +1,202 @@
+
+<template>
+      
+
+      <div :class="COMPUTED_horizontalVerticalClass" >
+
+        <sui-segment class="div-class-company-main-menu-box-component"  >
+
+          <template v-if="windowWidth >= 1200">
+            <company-main-menu-box-component @changedMenuItem="METHOD_change_path_menu" :menuItems="localMenuItems" class="div-class-company-main-menu-box-component"/>
+          </template>
+          <template v-else>
+            <company-main-menu-box-component @changedMenuItem="METHOD_change_path_menu" :menuItems="COMPUTED_localMenuItemsMobile" class="div-class-company-main-menu-box-component"/>
+
+          </template>
+
+        </sui-segment>
+
+        <!-- component containig form that allows user to create a new job offer -->
+
+        <template v-if="COMPUTED_router_path == self_store.getters.GET_LINKS_OBJECT.transferCreate" >
+          
+          <sui-segment style="width: 100%;">
+            <company-apply-form :formObject="local_test_item" :screeningQuestions="screeningQuestions"/>
+          </sui-segment>
+
+        </template>
+
+         <!-- component containig form that allows user to create a new job offer -->
+        <template v-else-if="COMPUTED_router_path == self_store.getters.GET_LINKS_OBJECT.company_information" >
+          
+          <sui-segment style="width: 100%;display: block;margin: auto;">
+            <company-main-panel-company-information id="top" />
+          </sui-segment>
+
+        </template>
+
+
+        <!-- component containig job offers -->
+        <template v-else >
+
+          <sui-segment style="width: 100%;">
+
+            <company-main-panel-table-with-job-offers id="top" />
+
+          </sui-segment>
+
+        </template>
+
+        <template v-if="windowWidth >= 1200">
+           <sui-segment class="company-main-info-box-segment" >
+            <company-info-box />
+          </sui-segment>
+        </template>
+
+
+    </div>
+
+
+</template>
+
+<style lang="scss">
+  @import './CompanyMainPanelComponent.css';
+</style>
+
+<script type="text/javascript">
+
+import { store } from '../../../store/store'
+import CompanyFilterComponentList from '../../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
+import CompanyImageComponentBox from '../../CompanyImageComponentBox/CompanyImageComponentBox/CompanyImageComponentBox.vue'
+import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
+import CompanyTableComponentBox from '../../CompanyTable/CompanyTableComponentBox/CompanyTableComponentBox.vue'
+import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
+import CompanyMainMenuBoxComponent from '../CompanyMainMenuBoxComponent/CompanyMainMenuBoxComponent.vue'
+import CompanyMainPanelCompanyInformation from '../CompanyMainPanelCompanyInformation/CompanyMainPanelCompanyInformation.vue'
+import CompanyMainPanelTableWithJobOffers from '../CompanyMainPanelTableWithJobOffers/CompanyMainPanelTableWithJobOffers.vue'
+import VueRouter from 'vue-router'
+var VueScrollTo = require('vue-scrollto');
+
+export default {
+  name: 'CompanyMainPanelComponent',
+  data () {
+    return {
+      windowWidth: window.innerWidth,
+      currently_viewed_job_offer: {},
+      localMenuItems: [
+        {
+          'id': 0,
+          'class': 'gamepad icon',
+          'title': 'My Transactions',
+          'path': store.getters.GET_LINKS_OBJECT.job_offers
+        },
+        {
+          'id': 1,
+          'class': 'video camera icon',
+          'title': 'Homepage',
+          'path': store.getters.GET_LINKS_OBJECT.homepage
+        },
+      ]
+    }
+  },
+  created () {
+  },
+  props: {
+
+  },
+  methods: {
+    isEmpty: function (obj) {
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) { return false }
+      }
+      return true
+    },
+    METHOD_change_path: function (nameOfThePath) {
+      console.log('zmieniam na: ' + nameOfThePath);
+      if (nameOfThePath == '/login') {
+        store.commit('MUTATE_currentAction', 'login')
+      }
+      this.$router.push(nameOfThePath)
+      VueScrollTo.scrollTo('#top', 500)
+    },
+    METHOD_change_path_menu: function (menuItemId) {
+      console.log('zmieniam na id: ' + menuItemId.id)
+      var self = this
+      this.COMPUTED_localMenuItemsMobile.forEach(function (menuItem) {
+        if (menuItem.id == menuItemId.id) {
+          console.log('zmieniam na path: ' + menuItem.path)
+          self.METHOD_change_path(menuItem.path)
+        }
+      })
+    }
+  },
+  mounted () {
+    window.addEventListener('resize', () => {
+      this.windowWidth = window.innerWidth
+    })
+  },
+  computed: {
+    COMPUTED_localMenuItemsMobile() {
+      let extendedMenuItemsArray = [...this.localMenuItems,
+        {
+          'id': 3,
+          'class': 'video camera icon',
+          'title': 'Post a Job',
+          'path': store.getters.GET_LINKS_OBJECT.transferCreate
+        }
+      ];
+      console.log('extendedMenuItemsArray: ' + JSON.stringify(extendedMenuItemsArray));
+      return extendedMenuItemsArray;
+    },
+    COMPUTED_horizontalVerticalClass() {
+      if(this.windowWidth <= 1200) {
+        return 'ui vertical segments';
+      } else {
+        return 'ui horizontal segments'
+      }
+    },
+    COMPUTED_styleMainDiv() {
+      if(this.windowWidth <= 1200) {
+         return `display: flex; flex-direction: column;`
+      } else {
+         return `display: flex; flex-direction: row;`
+      }
+    },
+    COMPUTED_router_path () {
+      return this.$route.path
+    },
+    COMPUTED_router_path_name () {
+      return this.$route.name
+    },
+    COMPUTED_currently_viewed_job_offer () {
+      return store.getters.GET_currently_viewed_job_offer
+    },
+    COMPUTED_local_currently_viewed_job_offer () {
+      return this.currently_viewed_job_offer
+    },
+    self_store () {
+      return store
+    }
+  },
+  watch: {
+    COMPUTED_currently_viewed_job_offer (newObject, oldObject) {
+      this.currently_viewed_job_offer = newObject
+    }
+  },
+  components: {
+    CompanyFilterComponentList,
+    CompanyImageComponentBox,
+    CompanyInfoBox,
+    CompanyTableComponentBox,
+    CompanyApplyForm,
+    VueRouter,
+    VueScrollTo,
+    CompanyMainMenuBoxComponent,
+    CompanyMainPanelTableWithJobOffers,
+    CompanyMainPanelCompanyInformation
+  },
+  watch: {
+  }
+}
+
+</script>
