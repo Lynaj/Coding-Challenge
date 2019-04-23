@@ -26,7 +26,7 @@ logger.addHandler(handler)
 
 
 class CompanyViewSetTestCase(APITestCase):
-    url = reverse('api:offers-crt')
+    url = reverse('api:transactions-transfer')
 
     def setUp(self):
         '''
@@ -137,6 +137,7 @@ class CompanyViewSetTestCase(APITestCase):
 
 
     def test_fully_working_transfer__different_currencies_different_users(self):
+        transferValue = 1000.0
         # Making sure user has enough funds
         queriedSenderBalance = ClientBalance.objects.filter(
             balanceOwner=self.test_first_user_client_object[0],
@@ -149,7 +150,7 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         queriedSenderBalance.update(
-            balanceValue = 1000
+            balanceValue = transferValue
         )
 
         # Making sure that the balance of the second user exists & equals 0
@@ -171,23 +172,28 @@ class CompanyViewSetTestCase(APITestCase):
 
         response = self.client.post(
             self.url,
-            {},
+            data=test_payload,
+            format='json',
             HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
         )
 
         self.assertEqual(response.status_code, 200)
 
+        # Refreshing querysets
+        queriedSenderBalance.refresh_from_db()
+        queriedRecipientBalance.refresh_from_db()
+
+        # Making sure that the transfer took a place
         self.assertEqual(
-            User.objects.all().count(),
-            1
+            queriedSenderBalance[0].balanceValue,
+            0.0
         )
 
         self.assertEqual(
-            Offer.objects.all().count(),
-            1
+            queriedRecipientBalance[0].balanceValue,
+            transferValue
         )
 
-        logger.error('Offer.objects.all()[0]: ' + str(Offer.objects.all()[0]))
 
     def test_fully_working_transfer__different_currencies_same_user(self):
         raise NotImplementedError()
