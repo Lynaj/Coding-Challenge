@@ -11,8 +11,6 @@ from apps.misc.logger import *
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
 
-
-
 class UserManager(BaseUserManager):
     def _create_user(
             self,
