@@ -38,9 +38,6 @@
           <company-register-component/>
         </div>
 
-        <div v-else-if="self_store.getters.GET_current_action == 'resetPasword'">
-          <company-password-reset-component/>
-        </div>
 
       </transition>
 
@@ -59,8 +56,6 @@
   import CompanyLoginComponent from '../../CompanyLoginComponent/CompanyLoginComponent/CompanyLoginComponent.vue'
   import CompanyRegisterComponent
     from '../../CompanyRegisterComponent/CompanyRegisterComponent/CompanyRegisterComponent.vue'
-  import CompanyPasswordResetComponent
-    from '../../CompanyPasswordResetComponent/CompanyPasswordResetComponent/CompanyPasswordResetComponent.vue'
   import VueRouter from 'vue-router'
 
   var VueScrollTo = require('vue-scrollto')
@@ -76,7 +71,6 @@
     components: {
       CompanyRegisterComponent,
       CompanyLoginComponent,
-      CompanyPasswordResetComponent,
       VueScrollTo,
       VueRouter
     },

@@ -43,13 +43,21 @@ export const fetchUserBalances = ({ commit, state }) => {
 }
 
 export const initializeTransfer = ({ commit, state }, data) => {
-  return new Promise((resolve, reject) => {
-    jobOffers.initializeMoneyTransfer(
-      data,
-      (response) => resolve(response),
-      (response) => reject(response)
-    )
-  })
+   axios.post('/api/v1/transactions/transfer',
+      data.data,
+      {
+        headers: {
+          Authorization: 'Bearer ' + data.token
+        }
+      }
+    ).then(response => {
+      if (response.status == 200) {
+        resolve(response);
+      }
+    })
+    .catch(error => {
+      reject(response);
+    });
 }
 
 export const fetchTransferRecipients = ({ commit, state}) => {

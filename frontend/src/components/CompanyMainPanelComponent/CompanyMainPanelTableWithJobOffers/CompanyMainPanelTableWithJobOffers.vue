@@ -19,26 +19,12 @@
         <template v-else>
 
           <tr class="">
-            <template v-if="self_store.getters.GET_USER_postedJobOffers.length > 0">
 
-              <td v-for="(local_queried_object, localIndex) in self_store.getters.GET_USER_postedJobOffers"
-                  style="display: flex; flex-direction: row;">
-                <company-table-component-base :extraButtonObject="buttonShowExtraButton" :buttonObject="buttonObject"
-                                              @invokeExtraFunction="METHOD_invokeShowMore"
-                                              @invokeApplyFunction="METHOD_invokeDeleteFunction"
-                                              :tableObject="local_queried_object"
-                                              :mainDivId="METHOD_computed_mainDivId(localIndex)"/>
-              </td>
-
-
-            </template>
-            <template v-else>
 
               <div class="formatted-wrong-item-icon"></div>
               <div style="font-size: 2em; text-align: center;padding-top: 2em;padding-bottom: 3em;">
                 {{ tableObject.emptyDataListMessage }}
               </div>
-            </template>
           </tr>
 
         </template>
@@ -56,7 +42,6 @@
 
 <script type="text/javascript">
   import {CircleLoader} from '@saeris/vue-spinners'
-  import CompanyTableComponentBase from '../../CompanyTable/CompanyTableComponentBase/CompanyTableComponentBase.vue'
   import VueRouter from 'vue-router'
 
 
@@ -69,8 +54,7 @@
     },
     components: {
       CircleLoader,
-      VueRouter,
-      CompanyTableComponentBase
+      VueRouter
     },
     data() {
       return {

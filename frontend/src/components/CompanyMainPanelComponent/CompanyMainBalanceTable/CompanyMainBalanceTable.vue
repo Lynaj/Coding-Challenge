@@ -32,10 +32,13 @@ export default {
   },
   mounted () {
     var self = this;
-    store.dispatch('user/fetchUserBalances').then(() => {
-    }).catch((e) => {
-      console.log(e);
-    });
+
+    setInterval(function(){
+      store.dispatch('user/fetchUserBalances').then(() => {
+      }).catch((e) => {
+      });
+    }, 1000);
+
 
     window.addEventListener('resize', () => {
       this.windowWidth = window.innerWidth;

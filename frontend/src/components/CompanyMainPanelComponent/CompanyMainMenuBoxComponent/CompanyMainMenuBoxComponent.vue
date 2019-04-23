@@ -30,7 +30,6 @@ import { store } from '../../../store/store'
 import CompanyFilterComponentList from '../../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
 import CompanyImageComponentBox from '../../CompanyImageComponentBox/CompanyImageComponentBox/CompanyImageComponentBox.vue'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
-import CompanyTableComponentBox from '../../CompanyTable/CompanyTableComponentBox/CompanyTableComponentBox.vue'
 import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import CompanyMainBalanceTable from '../CompanyMainBalanceTable/CompanyMainBalanceTable.vue'
 import VueRouter from 'vue-router'
@@ -104,7 +103,6 @@ export default {
     CompanyFilterComponentList,
     CompanyImageComponentBox,
     CompanyInfoBox,
-    CompanyTableComponentBox,
     CompanyApplyForm,
     VueRouter
   },

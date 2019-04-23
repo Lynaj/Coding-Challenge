@@ -45,13 +45,6 @@
         <sui-segment style="width: 100%;">
 
           <div v-if="self_store.getters.GET_current_action == ''">
-            <template v-if="isEmpty(self_store.getters.GET_currently_viewed_job_offer)">
-              <company-table-component-box id="top"/>
-            </template>
-
-            <template v-else>
-              <client-apply-form :formObject="self_store.getters.GET_currently_viewed_job_offer" />
-            </template>
 
           </div>
 
@@ -164,10 +157,8 @@ import { store } from '../../store/store'
 import CompanyFilterComponentList from '../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
 import CompanyImageComponentImage from '../CompanyImageComponentBox/CompanyImageComponentImage/CompanyImageComponentImage.vue'
 import CompanyInfoBox from '../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
-import CompanyTableComponentBox from '../CompanyTable/CompanyTableComponentBox/CompanyTableComponentBox.vue'
 import CompanyApplyForm from '../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import ClientApplyForm from '../CompanyApply/ClientApplyForm/ClientApplyForm.vue'
-import CompanyStatisticsStackedInTable from '../CompanyTable/CompanyTableComponentBase/CompanyStatisticsStackedInTable/CompanyStatisticsStackedInTable'
 import { Facebook, Twitter, LinkedIn } from 'vue-socialmedia-share';
 import VueRouter from 'vue-router'
 import Toasted from 'vue-toasted'
@@ -305,10 +296,8 @@ export default {
     CompanyFilterComponentList,
     CompanyImageComponentImage,
     CompanyInfoBox,
-    CompanyTableComponentBox,
     CompanyApplyForm,
-    VueRouter,
-    CompanyStatisticsStackedInTable
+    VueRouter
   },
   watch: {
     STORE_FILTERED_JOB_LIST(newVal, oldVal) {

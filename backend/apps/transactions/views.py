@@ -119,179 +119,194 @@ class TransactionsViewSet(viewsets.ModelViewSet):
     @list_route(methods=['POST'])
     def transfer(self, request):
 
-        try:
+        # try:
 
-            fromCurrency = request.data.get('fromCurrency', None)
-            toCurrency = request.data.get('toCurrency', None)
+        fromCurrency = request.data.get('fromCurrency', '')
+        toCurrency = request.data.get('toCurrency', '')
 
-            # Formatted as an e-mail address
-            toUser= request.data.get('toUser', None)
-            transactionValue = request.data.get('transactionValue', None)
+        # Formatted as an e-mail address
+        toUser= request.data.get('recipient', '')
+        transactionValue = request.data.get('value', '')
 
-            fromUser =  self.get_user_authenticated()
 
-            # Generating list of currencies ( their abbreviations )
-            listOfAcceptableCurrencies = [x[1] for x in CURRENCY_TYPE]
 
-            # Validating input
-            if (
-                fromCurrency in listOfAcceptableCurrencies
-                and
-                toCurrency in listOfAcceptableCurrencies
-                and re.match(
-                    r"^[^@]+@[^@]+\.[^@]+$",
-                    toUser
-                )
-                and
-                re.match(
-                    r"^\d\d*[.]?\d*$", str(transactionValue)
-                )
-            ):
-                transactionValue = Decimal(
-                    round(
+        fromUser =  self.get_user_authenticated()
+        # Generating list of currencies ( their abbreviations )
+        listOfAcceptableCurrencies = [x[1] for x in CURRENCY_TYPE]
+        # Validating input
+        firstCond = fromCurrency in listOfAcceptableCurrencies
+        secondCond = toCurrency in listOfAcceptableCurrencies
+        thirdCond = re.match(
+            r"^[^@]+@[^@]+\.[^@]+$",
+            toUser
+        )
+
+        fourthCond = re.match(
+            r"^\d\d*[.]?\d*$", str(transactionValue)
+        )
+
+        if (
+            firstCond
+            and
+            secondCond
+            and
+            thirdCond
+            and
+            fourthCond
+        ):
+            transactionValue = Decimal(
+                round(
+                    Decimal(
                         transactionValue
-                        ,
-                        2
                     )
+                    ,
+                    2
                 )
-                # Querying proper currency objects
-                fromCurrency = get_object_or_404(
-                    Currency.objects.all(),
-                    abbreviation=fromCurrency
-                )
-
-                toCurrency=get_object_or_404(
-                    Currency.objects.all(),
-                    abbreviation=toCurrency
-                )
-
-                # Querying to user
-                toUser = get_object_or_404(
-                    Client.objects.all(),
-                    userObject=get_object_or_404(
-                        User.objects.all(),
-                        email=toUser
-                    )
-                )
-
-                '''
-                Quering balance denoted in the currency
-                delivered by the user
-                '''
-
-                # fromCurrencyFrnated = list(filter(lambda x: x[1] == fromCurrency, CURRENCY_TYPE))[0]
-
-                # queriedCurrency = get_object_or_404(
-                #     Currency.objects.all(),
-                    # abbreviation=fromCurrency
-                # )
-
-                queriedSenderBalance = ClientBalance.objects.filter(
-                    balanceOwner=fromUser,
-                    balanceCurrency=fromCurrency
-                )
-
-                '''
-                    Creating a default 
-                    value of transaction ratio
-                    In situation in which both of used currencies
-                    are the same, it simply is multiplied by 1.0
-                    Otherwise, Algorithm uses proper relation
-                '''
-                transactionRatio = 1.0
-                '''
-                making sure that from and to currencies 
-                are the same
-                otherwise we have to convert the value of this transaction
-                '''
-                if (fromCurrency != toCurrency):
-                    '''
-                        Fetching the ratio of 
-                        parsed currencies
-                    '''
-                    transactionRatio = get_object_or_404(
-                        CurrencyRatio.objects.all(),
-                        fromCurrency=fromCurrency,
-                        toCurrency=toCurrency
-                    ).ratio
-
-
-                createdTransaction = Transaction.objects.create(
-                    recipient=toUser,
-                    sender=fromUser,
-                    fromCurrency=fromCurrency,
-                    toCurrency=toCurrency,
-                    value=transactionValue,
-                    exchangeRate=transactionRatio,
-                )
-
-
-                # Determining, whether user has enough funds
-                if(
-                    queriedSenderBalance[0].balanceValue < transactionValue
-                    or transactionValue <= 0
-                ):
-
-
-                    '''
-                    Creating transaction object without moving any funds
-                    We need this one in order to store
-                    the entire history of transactions
-                    even these, which could not be realized
-                    '''
-
-                    # updating transaction status
-                    createdTransaction.transactionStatusChoices = list(filter(lambda x: x[1] == "Failed", TransactionStatusChoices))
-                    createdTransaction.save()
-
-                    return Response(
-                        status=status.HTTP_409_CONFLICT
-                    )
-
-                else:
-                    # Updating sender's balance
-                    queriedSenderBalance.update(
-                        balanceValue = (
-                            Decimal(
-                                transactionValue
-                            )- queriedSenderBalance[0].balanceValue
-                        )
-                    )
-
-                    # Updating value of the transaction
-                    transactionValue *= Decimal(transactionRatio)
-
-                    # Updating recipient's balance
-                    queriedRecipientBalance = ClientBalance.objects.filter(
-                       balanceOwner=toUser,
-                       balanceCurrency=toCurrency
-                    )
-
-                    # updating transaction status
-                    createdTransaction.transactionStatusChoices = list(
-                        filter(lambda x: x[1] == "Processed", TransactionStatusChoices)
-                    )
-                    createdTransaction.save()
-
-                    queriedRecipientBalance.update(
-                        balanceValue=(
-                            Decimal(
-                                transactionValue
-                            ) + queriedRecipientBalance[0].balanceValue
-                        )
-                    )
-
-                    return Response(
-                        status=status.HTTP_200_OK
-                    )
-
-        except Exception as e:
-            logger.error(
-                "Something unexpected happened when in: TransactionsViewSet-transfer:"
-                + '\n'
-                + str(e)
+            )
+            # Querying proper currency objects
+            fromCurrency = get_object_or_404(
+                Currency.objects.all(),
+                abbreviation=fromCurrency
             )
 
-        return Response(
-            status=status.HTTP_404_NOT_FOUND
-        )
+            toCurrency=get_object_or_404(
+                Currency.objects.all(),
+                abbreviation=toCurrency
+            )
+
+            # Querying to user
+            toUser = get_object_or_404(
+                Client.objects.all(),
+                userObject=get_object_or_404(
+                    User.objects.all(),
+                    email=toUser
+                )
+            )
+
+            '''
+            Quering balance denoted in the currency
+            delivered by the user
+            '''
+
+            # fromCurrencyFrnated = list(filter(lambda x: x[1] == fromCurrency, CURRENCY_TYPE))[0]
+
+            # queriedCurrency = get_object_or_404(
+            #     Currency.objects.all(),
+                # abbreviation=fromCurrency
+            # )
+
+            queriedSenderBalance = ClientBalance.objects.filter(
+                balanceOwner=fromUser,
+                balanceCurrency=fromCurrency
+            )
+
+            '''
+                Creating a default 
+                value of transaction ratio
+                In situation in which both of used currencies
+                are the same, it simply is multiplied by 1.0
+                Otherwise, Algorithm uses proper relation
+            '''
+            transactionRatio = 1.0
+            '''
+            making sure that from and to currencies 
+            are the same
+            otherwise we have to convert the value of this transaction
+            '''
+
+            if (fromCurrency != toCurrency):
+                '''
+                    Fetching the ratio of 
+                    parsed currencies
+                '''
+                transactionRatio = get_object_or_404(
+                    CurrencyRatio.objects.all(),
+                    fromCurrency=fromCurrency,
+                    toCurrency=toCurrency
+                ).ratio
+
+                logger.error('1' + str(fourthCond))
+
+            createdTransaction = Transaction.objects.create(
+                recipient=toUser,
+                sender=fromUser,
+                fromCurrency=fromCurrency,
+                toCurrency=toCurrency,
+                value=transactionValue,
+                exchangeRate=transactionRatio,
+            )
+
+
+            # Determining, whether user has enough funds
+            if(
+                queriedSenderBalance[0].balanceValue < transactionValue
+                or transactionValue <= 0
+            ):
+
+
+                '''
+                Creating transaction object without moving any funds
+                We need this one in order to store
+                the entire history of transactions
+                even these, which could not be realized
+                '''
+
+                # updating transaction status
+                createdTransaction.transactionStatusChoices = list(filter(lambda x: x[1] == "Failed", TransactionStatusChoices))
+                createdTransaction.save()
+
+                return Response(
+                    status=status.HTTP_409_CONFLICT
+                )
+
+            else:
+                # Updating sender's balance
+                queriedSenderBalance.update(
+                    balanceValue = (
+                        queriedSenderBalance[0].balanceValue
+                        -
+                        Decimal(
+                            transactionValue
+                        )
+                    )
+                )
+
+                # Updating value of the transaction
+                transactionValue *= Decimal(transactionRatio)
+
+                # Updating recipient's balance
+                queriedRecipientBalance = ClientBalance.objects.filter(
+                   balanceOwner=toUser,
+                   balanceCurrency=toCurrency
+                )
+
+                # updating transaction status
+                createdTransaction.transactionStatusChoices = list(
+                    filter(lambda x: x[1] == "Processed", TransactionStatusChoices)
+                )
+                createdTransaction.save()
+
+                queriedRecipientBalance.update(
+                    balanceValue=(
+                        Decimal(
+                            transactionValue
+                        ) + queriedRecipientBalance[0].balanceValue
+                    )
+                )
+
+                return Response(
+                    status=status.HTTP_200_OK
+                )
+
+        else:
+        #
+        # except Exception as e:
+        #     logger.error(
+        #         "Something unexpected happened when in: TransactionsViewSet-transfer:"
+        #         + '\n'
+        #         + str(e)
+        #     )
+        #
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )

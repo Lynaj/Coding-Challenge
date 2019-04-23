@@ -23,44 +23,30 @@ class ClientBalanceSerializer(serializers.ModelSerializer):
             'value'
         ]
 
-    def get_currency(self, queriedObject):
+    def get_currency(self, instance):
+        currency = None
         try:
-            screeningQuestionDataObject = {
-                'id': queriedObject.question.id,
-                'question': queriedObject.question.question
-            }
+            currency = instance.balanceCurrency.abbreviation
         except Exception as e:
+            currency = ""
 
             logger.error(
-                "Something unexpected happened when in: ApplicantSerializer-get_personal: "
+                "Something unexpected happened when in: ClientBalanceSerializer-get_currency: "
                 + '\n'
                 + str(e)
             )
+        return currency
 
-            screeningQuestionDataObject = {
-                'id': 0,
-                'question': ''
-            }
-
-        return screeningQuestionDataObject
-
-    def get_value(self, queriedObject):
+    def get_value(self, instance):
+        currency = None
         try:
-            screeningQuestionDataObject = {
-                'id': queriedObject.question.id,
-                'question': queriedObject.question.question
-            }
+            currency = instance.balanceValue
         except Exception as e:
+            currency = 0.0
 
             logger.error(
-                "Something unexpected happened when in: ApplicantSerializer-get_personal: "
+                "Something unexpected happened when in: ClientBalanceSerializer-get_value: "
                 + '\n'
                 + str(e)
             )
-
-            screeningQuestionDataObject = {
-                'id': 0,
-                'question': ''
-            }
-
-        return screeningQuestionDataObject
+        return currency

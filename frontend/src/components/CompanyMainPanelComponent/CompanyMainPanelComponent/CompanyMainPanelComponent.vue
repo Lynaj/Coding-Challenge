@@ -69,7 +69,6 @@ import { store } from '../../../store/store'
 import CompanyFilterComponentList from '../../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
 import CompanyImageComponentBox from '../../CompanyImageComponentBox/CompanyImageComponentBox/CompanyImageComponentBox.vue'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
-import CompanyTableComponentBox from '../../CompanyTable/CompanyTableComponentBox/CompanyTableComponentBox.vue'
 import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import CompanyMainMenuBoxComponent from '../CompanyMainMenuBoxComponent/CompanyMainMenuBoxComponent.vue'
 import CompanyMainPanelCompanyInformation from '../CompanyMainPanelCompanyInformation/CompanyMainPanelCompanyInformation.vue'
@@ -187,7 +186,6 @@ export default {
     CompanyFilterComponentList,
     CompanyImageComponentBox,
     CompanyInfoBox,
-    CompanyTableComponentBox,
     CompanyApplyForm,
     VueRouter,
     VueScrollTo,

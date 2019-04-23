@@ -10,6 +10,10 @@ img.preview {
   padding: 5px;
 }
 
+
+.multiselect__tags {
+  background-color: transparent !important;
+}
 .text-reader-div-inside {
   bottom: center;
   font-size: 4em;
