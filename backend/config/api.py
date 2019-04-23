@@ -11,4 +11,4 @@ api.trailing_slash = '/?'
 api.register(r'users', UserViewSet, base_name="Users Types View")
 
 api.register(r'transactions', TransactionsViewSet, base_name="transactions")
-api.register(r'balances', ClientBalanceViewSet, base_name="Client Balance ViewSet")
+api.register(r'balances', ClientBalanceViewSet, base_name="balances")

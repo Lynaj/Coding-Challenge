@@ -249,11 +249,20 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     otherwise we have to convert the value of this transaction
                     '''
                     if(fromCurrency != toCurrency):
-                        transactionValue *= get_object_or_404(
+
+                        '''
+                            Fetching the ratio of 
+                            parsed currencies
+                        '''
+                        transactionRatio = get_object_or_404(
                             CurrencyRatio.objects.all(),
                             fromCurrency=fromCurrency,
                             toCurrency=toCurrency
                         ).ratio
+
+                        transactionValue *= transactionRatio
+                        createdTransaction.exchangeRate = transactionRatio
+
 
                     # updating transaction status
                     createdTransaction.transactionStatusChoices = list(
