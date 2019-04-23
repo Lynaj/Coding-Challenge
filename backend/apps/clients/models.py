@@ -12,6 +12,8 @@ from backend.apps.users.models import User
 from backend.apps.currencies.models import Currency
 from backend.apps.misc.logger import *
 
+env = environ.Env()
+
 # +++++++++++++++++++++++++++++++++++
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
@@ -65,7 +67,7 @@ class ClientBalance(models.Model):
         verbose_name='Linked currency'
     )
 
-    balanceVaue = models.DecimalField(
+    balanceValue = models.DecimalField(
         default=0.0,
         max_digits=190,
         null=True,
@@ -83,3 +85,51 @@ class ClientBalance(models.Model):
         blank=True,
         auto_now_add=timezone.now
     )
+
+
+'''
+    * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+    * @description 
+        The method is creating ClientBalance for each and every available currency
+        & linking it with corresponded Client account
+    * @param -
+    * @return -
+'''
+
+def CreateBasicCurrencyStack(sender,
+                        instance,
+                        created,
+                        raw,
+                        using,
+                        update_fields,
+                        **kwargs):
+    if created:
+
+        try:
+
+            for currency in Currency.objects.all():
+                '''
+                    determining with given currency is a default
+                    one or not
+                    If so, it's value should equal hard-coded value
+                '''
+                balanceValue = 0
+
+                if(currency.defaultSystemCurrency):
+                    balanceValue = env.bool('DEFAULT_CURRENCY_VALUE')
+
+                ClientBalance.objects.create(
+                    balanceOwner=instance,
+                    balanceCurrency=currency,
+                    balanceValue=0
+                )
+
+        except Exception as e:
+            logger.error(
+                '[*** TRIGGER ***] [ ERROR ] [ CreateBasicCurrencyStack ] '
+                +
+                'Problem: exception occured during the process of creating ClientBalance'
+                + 'error: ' + str(e)
+            )
+
+post_save.connect(CreateBasicCurrencyStack, sender=Client)

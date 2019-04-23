@@ -23,10 +23,15 @@ class Currency(models.Model):
         verbose_name='Name of the currency'
     )
 
-    abbreviation  models.CharField(
+    abbreviation = models.CharField(
         max_length=30,
         null=False,
         verbose_name='Abbreviation of the currency'
+    )
+
+    defaultSystemCurrency = models.BooleanField(
+        default=False,
+        verbose_name='Is a default currency of the entire system'
     )
 
 
