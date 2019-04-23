@@ -31,7 +31,13 @@ class CompanyViewSetTestCase(APITestCase):
     url = reverse('api:transactions-transfer')
 
     # Internal Func
-    def __checkTransaction(self, queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction):
+    def __checkTransaction(self,
+                           queriedSenderBalance,
+                           queriedRecipientBalance,
+                           test_ratio,
+                           transferValue,
+                           statusOfTheTransaction,
+                           isSendAndRecipientTheSame=False):
         # Making sure that the transfer took a place
         # Validating the creation of Transaction object
         queriedTransaction = Transaction.objects.all()
@@ -42,7 +48,8 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         # Making sure that it's not the same user
-        if(queriedSenderBalance[0].id != queriedRecipientBalance[0].id):
+        if (queriedSenderBalance[0].id != queriedRecipientBalance[0].id
+        and isSendAndRecipientTheSame == False):
             self.assertEqual(
                 queriedTransaction[0].recipient,
                 self.test_second_user_client_object[0]
@@ -56,10 +63,9 @@ class CompanyViewSetTestCase(APITestCase):
             Making sure that
             it's not the same currency
         '''
-        if(
+        if (
             queriedTransaction[0].fromCurrency.abbreviation
             != queriedTransaction[0].toCurrency.abbreviation):
-
             self.assertEqual(
                 queriedTransaction[0].fromCurrency.abbreviation,
                 self.queriedCurrencies[0].abbreviation
@@ -94,7 +100,6 @@ class CompanyViewSetTestCase(APITestCase):
             this operation has to be completed before
             the creation of the user
         '''
-
 
         currencyIterator = iter(CURRENCY_TYPE)
         for currencies in range(len(CURRENCY_TYPE)):
@@ -132,11 +137,11 @@ class CompanyViewSetTestCase(APITestCase):
         test_first_name__second_user = "Dmovsky"
         test_last_name__second_user = "Peter"
 
-        test_email__first_user= "johnymarge1@wp.pl"
-        test_email__second_user= "johnymar123ge1@wp.pl"
+        test_email__first_user = "johnymarge1@wp.pl"
+        test_email__second_user = "johnymar123ge1@wp.pl"
 
         test_password__first_user = "ij43i$#@"
-        test_password__second_user= "ij43i$#@"
+        test_password__second_user = "ij43i$#@"
 
         url = reverse('api-jwt-auth')
 
@@ -160,7 +165,8 @@ class CompanyViewSetTestCase(APITestCase):
         self.test_first_user.is_active = False
         self.test_first_user.save()
 
-        resp = self.client.post(url, {'email': test_email__first_user, 'password': test_password__first_user}, format='json')
+        resp = self.client.post(url, {'email': test_email__first_user, 'password': test_password__first_user},
+                                format='json')
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.test_first_user.is_active = True
@@ -168,7 +174,8 @@ class CompanyViewSetTestCase(APITestCase):
 
         self.token = ''
 
-        resp = self.client.post(url, {'email': test_email__first_user, 'password': test_password__first_user}, format='json')
+        resp = self.client.post(url, {'email': test_email__first_user, 'password': test_password__first_user},
+                                format='json')
 
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertTrue('token' in resp.data)
@@ -212,7 +219,7 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         queriedSenderBalance.update(
-            balanceValue = transferValue
+            balanceValue=transferValue
         )
 
         # Making sure that the balance of the second user exists & equals 0
@@ -231,11 +238,10 @@ class CompanyViewSetTestCase(APITestCase):
             to convert currencies
         '''
         CurrencyRatio.objects.create(
-            fromCurrency = self.queriedCurrencies[0],
-            toCurrency = self.queriedCurrencies[1],
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[1],
             ratio=test_ratio
         )
-
 
         # Creating a request
         test_payload = {
@@ -266,11 +272,12 @@ class CompanyViewSetTestCase(APITestCase):
 
         self.assertEqual(
             queriedRecipientBalance[0].balanceValue,
-            test_ratio*transferValue
+            test_ratio * transferValue
         )
 
         # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)
+        self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue,
+                                statusOfTheTransaction)
 
     def test_fully_working_transfer__different_currencies_same_user(self):
         transferValue = 1000.0
@@ -346,9 +353,8 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)
-
-
+        self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue,
+                                statusOfTheTransaction, True)
 
     def test_fully_working_transfer__same_currencies_same_user(self):
         transferValue = 1000.0
@@ -424,7 +430,8 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)
+        self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, 1.0, transferValue,
+                                statusOfTheTransaction, True)
 
     def test_lack_of_funds_error__same_currencies_same_user(self):
         transferValue = 1000.0
@@ -500,7 +507,8 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)
+        self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, 1.0, transferValue,
+                                statusOfTheTransaction)
 
     def test_lack_of_funds_error__different_currencies_same_user(self):
 
@@ -577,8 +585,8 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, 0.0, statusOfTheTransaction)
-
+        self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction,
+                                True)
 
     def test_lack_of_funds_error__different_currencies_different_users(self):
         transferValue = 1000.0
@@ -597,7 +605,7 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         queriedSenderBalance.update(
-            balanceValue = 0.0
+            balanceValue=0.0
         )
 
         # Making sure that the balance of the second user exists & equals 0
@@ -616,11 +624,10 @@ class CompanyViewSetTestCase(APITestCase):
             to convert currencies
         '''
         CurrencyRatio.objects.create(
-            fromCurrency = self.queriedCurrencies[0],
-            toCurrency = self.queriedCurrencies[1],
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[1],
             ratio=test_ratio
         )
-
 
         # Creating a request
         test_payload = {
@@ -655,7 +662,7 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, 0.0, statusOfTheTransaction)
+        self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)
 
     def test_negative_transfer_value_positive_balance_of_sender__different_currencies_different_users(self):
         transferValue = -1000.0
@@ -675,7 +682,7 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         queriedSenderBalance.update(
-            balanceValue = balanceOfSender
+            balanceValue=balanceOfSender
         )
 
         # Making sure that the balance of the second user exists & equals 0
@@ -694,11 +701,10 @@ class CompanyViewSetTestCase(APITestCase):
             to convert currencies
         '''
         CurrencyRatio.objects.create(
-            fromCurrency = self.queriedCurrencies[0],
-            toCurrency = self.queriedCurrencies[1],
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[1],
             ratio=test_ratio
         )
-
 
         # Creating a request
         test_payload = {
@@ -731,9 +737,6 @@ class CompanyViewSetTestCase(APITestCase):
             queriedRecipientBalance[0].balanceValue,
             0.0
         )
-
-        # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)
 
     def test_large_float_points_attack__different_currencies_different_users(self):
         transferValue = 0.000001
@@ -753,7 +756,7 @@ class CompanyViewSetTestCase(APITestCase):
         )
 
         queriedSenderBalance.update(
-            balanceValue = balanceOfSender
+            balanceValue=balanceOfSender
         )
 
         # Making sure that the balance of the second user exists & equals 0
@@ -772,11 +775,10 @@ class CompanyViewSetTestCase(APITestCase):
             to convert currencies
         '''
         CurrencyRatio.objects.create(
-            fromCurrency = self.queriedCurrencies[0],
-            toCurrency = self.queriedCurrencies[1],
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[1],
             ratio=test_ratio
         )
-
 
         # Creating a request
         test_payload = {
@@ -809,6 +811,3 @@ class CompanyViewSetTestCase(APITestCase):
             queriedRecipientBalance[0].balanceValue,
             0.0
         )
-
-        # Validating the creation of Transaction object
-        #self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)

@@ -191,6 +191,30 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     balanceCurrency=fromCurrency
                 )
 
+                '''
+                    Creating a default 
+                    value of transaction ratio
+                    In situation in which both of used currencies
+                    are the same, it simply is multiplied by 1.0
+                    Otherwise, Algorithm uses proper relation
+                '''
+                transactionRatio = 1.0
+                '''
+                making sure that from and to currencies 
+                are the same
+                otherwise we have to convert the value of this transaction
+                '''
+                if (fromCurrency != toCurrency):
+                    '''
+                        Fetching the ratio of 
+                        parsed currencies
+                    '''
+                    transactionRatio = get_object_or_404(
+                        CurrencyRatio.objects.all(),
+                        fromCurrency=fromCurrency,
+                        toCurrency=toCurrency
+                    ).ratio
+
 
                 createdTransaction = Transaction.objects.create(
                     recipient=toUser,
@@ -198,7 +222,7 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                     fromCurrency=fromCurrency,
                     toCurrency=toCurrency,
                     value=transactionValue,
-                    exchangeRate=0.0,
+                    exchangeRate=transactionRatio,
                 )
 
 
@@ -233,36 +257,15 @@ class TransactionsViewSet(viewsets.ModelViewSet):
                             )- queriedSenderBalance[0].balanceValue
                         )
                     )
-                    # queriedSenderBalance[0].save()
+
+                    # Updating value of the transaction
+                    transactionValue *= Decimal(transactionRatio)
 
                     # Updating recipient's balance
                     queriedRecipientBalance = ClientBalance.objects.filter(
                        balanceOwner=toUser,
                        balanceCurrency=toCurrency
                     )
-
-
-
-                    '''
-                    making sure that from and to currencies 
-                    are the same
-                    otherwise we have to convert the value of this transaction
-                    '''
-                    if(fromCurrency != toCurrency):
-
-                        '''
-                            Fetching the ratio of 
-                            parsed currencies
-                        '''
-                        transactionRatio = get_object_or_404(
-                            CurrencyRatio.objects.all(),
-                            fromCurrency=fromCurrency,
-                            toCurrency=toCurrency
-                        ).ratio
-
-                        transactionValue *= transactionRatio
-                        createdTransaction.exchangeRate = transactionRatio
-
 
                     # updating transaction status
                     createdTransaction.transactionStatusChoices = list(
