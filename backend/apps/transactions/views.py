@@ -102,7 +102,17 @@ class TransactionsViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-
+    '''
+          * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+          * @description
+               
+               Functions responsible for transfering money, 
+               as well as for converting them.
+               There is no need of creating another endpoint - this one is able to handle
+               both of these operations
+          * @param -
+          * @return -
+      '''
     @list_route(methods=['POST'])
     def transfer(self, request):
 
@@ -236,7 +246,7 @@ class TransactionsViewSet(viewsets.ModelViewSet):
 
         except Exception as e:
             logger.error(
-                "Something unexpected happened when in: transfer"
+                "Something unexpected happened when in: TransactionsViewSet-transfer:"
                 + '\n'
                 + str(e)
             )
@@ -244,26 +254,3 @@ class TransactionsViewSet(viewsets.ModelViewSet):
         return Response(
             status=status.HTTP_404_NOT_FOUND
         )
-
-    @list_route(methods=['POST'])
-    def convert(self, request):
-        try:
-
-            queryset = self.get_queryset()
-            page = self.request.query_params.get('page', None)
-            if page is not None:
-                paginate_queryset = self.paginate_queryset(queryset)
-                serializer = self.serializer_class(paginate_queryset, many=True)
-                return self.get_paginated_response(serializer.data)
-
-            serializer = self.serializer_class(queryset, many=True)
-            return Response(serializer.data)
-
-        except Exception as e:
-            logger.error(
-                "Something unexpected happened when in: CompanyViewSet-data: "
-                + '\n'
-                + str(e)
-            )
-
-        return Response(status=status.HTTP_404_NOT_FOUND)
