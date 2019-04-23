@@ -132,4 +132,46 @@ def CreateBasicCurrencyStack(sender,
                 + 'error: ' + str(e)
             )
 
+
+'''
+    * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+    * @description 
+        The method is creating Client object
+        & linking it with corresponded User obj
+    * @param -
+    * @return -
+'''
+
+def CreateBasicClientObject(sender,
+                        instance,
+                        created,
+                        raw,
+                        using,
+                        update_fields,
+                        **kwargs):
+    if created:
+
+        try:
+
+            queriedNativeSystemCurrency = Currency.objects.filter(
+                defaultSystemCurrency=True
+            )
+            if(queriedNativeSystemCurrency.count() == 1):
+                Client.objects.create(
+                    userObject=instance,
+                    nativeAccountCurrenc=queriedNativeSystemCurrency[0]
+                )
+            else:
+                raise Exception("Default currency of the system is not valid.")
+
+
+        except Exception as e:
+            logger.error(
+                '[*** TRIGGER ***] [ ERROR ] [ CreateBasicCurrencyStack ] '
+                +
+                'Problem: exception occured during the process of creating ClientBalance'
+                + 'error: ' + str(e)
+            )
+
 post_save.connect(CreateBasicCurrencyStack, sender=Client)
+post_save.connect(CreateBasicClientObject, sender=Client)
