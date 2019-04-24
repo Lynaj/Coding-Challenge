@@ -88,6 +88,7 @@ def SecurePlatformOnlyOneDefaultCurrencyAllowed(sender,
             we have to set this field as "False" for each and every other currency
             '''
             if(
+                not created and
                 instance.defaultSystemCurrency == True
             ):
                 # Creating a BULK opreration

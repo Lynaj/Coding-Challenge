@@ -108,6 +108,12 @@ def CreateBasicCurrencyStack(sender,
     if created:
 
         try:
+            # Making sure there exist at least one currency in the system
+            queriedCurrencies = Currency.objects.all()
+            if(queriedCurrencies.count() == 0):
+                Currency.objects.create(name="USD", abbreviation="USD", defaultSystemCurrency=True)
+                Currency.objects.create(name="GBP", abbreviation="GBP", defaultSystemCurrency=False)
+                Currency.objects.create(name="EURO", abbreviation="EURO", defaultSystemCurrency=False)
 
             for currency in Currency.objects.all():
                 '''
