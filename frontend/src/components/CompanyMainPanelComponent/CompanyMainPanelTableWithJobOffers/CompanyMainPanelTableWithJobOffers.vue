@@ -18,14 +18,20 @@
 
         <template v-else>
 
-          <tr class="">
+          <template v-if="">
 
 
-              <div class="formatted-wrong-item-icon"></div>
-              <div style="font-size: 2em; text-align: center;padding-top: 2em;padding-bottom: 3em;">
-                {{ tableObject.emptyDataListMessage }}
-              </div>
-          </tr>
+          </template>
+
+          <template v-else>
+            <tr class="">
+                <div class="formatted-wrong-item-icon"></div>
+                <div style="font-size: 2em; text-align: center;padding-top: 2em;padding-bottom: 3em;">
+                  {{ tableObject.emptyDataListMessage }}
+                </div>
+            </tr>
+          </template>
+
 
         </template>
 
@@ -59,9 +65,9 @@
     data() {
       return {
         tableObject: {
-          title: 'Posted Job Offers',
+          title: 'Transactions',
           loading: true,
-          emptyDataListMessage: 'You have not created any job offers yet.'
+          emptyDataListMessage: 'You have not created any transactions yet.'
         },
         buttonObject: {
           title: 'Delete'

@@ -127,7 +127,6 @@
 <style lang="scss">
   @import './CompanyApplyForm.css';
 </style>
-
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <script type="text/javascript">

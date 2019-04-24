@@ -24,8 +24,8 @@ storiesOf('CompanyMainPanelComponent', module)
         component: CompanyMainPanelComponent,
         name: 'menu',
         children: [{
-          path: '/offers',
-          name: 'offers',
+          path: '/transactions',
+          name: 'transactions',
           component: CompanyMainPanelComponent
         },
         {

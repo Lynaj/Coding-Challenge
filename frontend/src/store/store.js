@@ -28,7 +28,7 @@ export const store = new Vuex.Store({
     linksObject: {
       homepage: '/',
       main_menu: '/menu',
-      job_offers: '/menu/offers',
+      transactions: '/menu/transactions',
       job_applications: '/menu/applications',
       job_applications_specified_offer: '/menu/applications/:job_offer_title',
       transferCreate: '/menu/create',

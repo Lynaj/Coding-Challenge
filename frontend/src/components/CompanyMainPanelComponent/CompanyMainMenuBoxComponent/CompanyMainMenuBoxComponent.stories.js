@@ -17,8 +17,8 @@ var menuItems = [
   {
     'id': 0,
     'class': 'gamepad icon',
-    'title': 'My Job Offers',
-    'path': store.getters.GET_LINKS_OBJECT.job_offers
+    'title': 'My Transactions',
+    'path': store.getters.GET_LINKS_OBJECT.transactions
   },
   {
     'id': 1,
@@ -41,8 +41,8 @@ export default new Router({
       name: 'menu',
       component: CompanyMainPanelComponent,
       children: [{
-        path: '/offers',
-        name: 'offers',
+        path: '/transactions',
+        name: 'transactions',
         component: CompanyMainPanelComponent
       },
       {

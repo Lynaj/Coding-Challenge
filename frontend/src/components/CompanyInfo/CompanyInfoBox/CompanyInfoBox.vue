@@ -17,16 +17,6 @@
 
         </div>
 
-
-        <div v-on:click="createATransfer">
-          <div class="ui card company-info-box-main-class" style="margin-top: 5em;height: 7em;">
-            <button class="ui bottom attached label company-image-leading-button"
-                    style="background-color: rgb(33, 186, 69); color: rgb(255, 255, 255);height: 100% !important;"><i
-              class="icon user"></i>Convert Money
-            </button>
-          </div>
-        </div>
-
       </div>
 
 

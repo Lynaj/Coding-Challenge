@@ -26,26 +26,15 @@
 
         </template>
 
-         <!-- component containig form that allows user to create a new job offer -->
-        <template v-else-if="COMPUTED_router_path == self_store.getters.GET_LINKS_OBJECT.company_information" >
+         <!-- component containig table with processed transactions -->
+        <template v-else-if="COMPUTED_router_path == self_store.getters.GET_LINKS_OBJECT.transactions" >
           
           <sui-segment style="width: 100%;display: block;margin: auto;">
-            <company-main-panel-company-information id="top" />
+            <company-table-with-transactions id="top" />
           </sui-segment>
 
         </template>
 
-
-        <!-- component containig job offers -->
-        <template v-else >
-
-          <sui-segment style="width: 100%;">
-
-            <company-main-panel-table-with-job-offers id="top" />
-
-          </sui-segment>
-
-        </template>
 
         <template v-if="windowWidth >= 1200">
            <sui-segment class="company-main-info-box-segment" >
@@ -67,12 +56,11 @@
 
 import { store } from '../../../store/store'
 import CompanyFilterComponentList from '../../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
-import CompanyImageComponentBox from '../../CompanyImageComponentBox/CompanyImageComponentBox/CompanyImageComponentBox.vue'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
 import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import CompanyMainMenuBoxComponent from '../CompanyMainMenuBoxComponent/CompanyMainMenuBoxComponent.vue'
 import CompanyMainPanelCompanyInformation from '../CompanyMainPanelCompanyInformation/CompanyMainPanelCompanyInformation.vue'
-import CompanyMainPanelTableWithJobOffers from '../CompanyMainPanelTableWithJobOffers/CompanyMainPanelTableWithJobOffers.vue'
+import CompanyTableWithTransactions from '../CompanyTableWithTransactions/CompanyTableWithTransactions.vue'
 import VueRouter from 'vue-router'
 var VueScrollTo = require('vue-scrollto');
 
@@ -87,7 +75,7 @@ export default {
           'id': 0,
           'class': 'gamepad icon',
           'title': 'My Transactions',
-          'path': store.getters.GET_LINKS_OBJECT.job_offers
+          'path': store.getters.GET_LINKS_OBJECT.transactions
         },
         {
           'id': 1,
@@ -184,13 +172,12 @@ export default {
   },
   components: {
     CompanyFilterComponentList,
-    CompanyImageComponentBox,
     CompanyInfoBox,
     CompanyApplyForm,
     VueRouter,
     VueScrollTo,
+    CompanyTableWithTransactions,
     CompanyMainMenuBoxComponent,
-    CompanyMainPanelTableWithJobOffers,
     CompanyMainPanelCompanyInformation
   },
   watch: {

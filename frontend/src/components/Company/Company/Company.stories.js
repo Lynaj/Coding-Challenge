@@ -123,7 +123,7 @@ storiesOf('Company', module)
         path: '/menu',
         component: CompanyMainPanelComponent,
         children: [{
-          path: '/offers',
+          path: '/transactions',
           component: CompanyMainPanelComponent
         },
         {

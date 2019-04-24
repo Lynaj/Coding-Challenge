@@ -26,8 +26,8 @@ let router = new Router({
           requiresAuth: true
       },
       children: [{
-        path: 'offers',
-        name: 'offers',
+        path: 'transactions',
+        name: 'transactions',
         component: CompanyMainPanelComponent,
         meta: { 
             requiresAuth: true

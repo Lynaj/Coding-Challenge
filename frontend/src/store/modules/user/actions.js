@@ -19,7 +19,25 @@ export const fetchAvailableCurrencies = ({ commit, state}) => {
   })
 };
 
-
+export const fetchUserTransactions = ({ commit, state }) => {
+ return new Promise((resolve, reject) => {
+    axios.get('/api/v1/transactions/',
+{
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('jwt')
+        }
+      }
+    ).then(response => {
+       commit(
+          types.TRANSACTIONS.SAVE_ALL, {payload: response.data.results}
+        );
+        resolve();
+    })
+    .catch(error => {
+      reject(types.TRANSACTIONS.SAVE_ALL, {payload: []});
+    })
+  })
+}
 
 export const fetchUserBalances = ({ commit, state }) => {
  return new Promise((resolve, reject) => {

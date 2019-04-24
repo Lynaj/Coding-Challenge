@@ -2,7 +2,6 @@
   <div>
     <sui-segment raised>
 
-      <company-image-component-image :imageObject="queriedCompany.image" />
     
     <!-- Facebook -->
     <div style="display: flex; flex-direction: row;">
@@ -85,7 +84,7 @@
 
     1. logo
 
-    2. company table wiht job offers
+    2. company table wiht job transactions
 
     3. company information
 
@@ -155,7 +154,6 @@ website:"https://www.glassdoor.com/Jobs/Binance-Jobs-E1816824.htm"
 import { mapState } from 'vuex';
 import { store } from '../../store/store'
 import CompanyFilterComponentList from '../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
-import CompanyImageComponentImage from '../CompanyImageComponentBox/CompanyImageComponentImage/CompanyImageComponentImage.vue'
 import CompanyInfoBox from '../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
 import CompanyApplyForm from '../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import ClientApplyForm from '../CompanyApply/ClientApplyForm/ClientApplyForm.vue'
@@ -294,7 +292,6 @@ export default {
     LinkedIn,
     ClientApplyForm,
     CompanyFilterComponentList,
-    CompanyImageComponentImage,
     CompanyInfoBox,
     CompanyApplyForm,
     VueRouter

@@ -16,6 +16,7 @@ export const state = {
     RECIPIENTS: [],
     CURRENCIES: [],
     BALANCES: [],
+    TRANSACTIONS: [],
   }
 };
 
@@ -28,6 +29,9 @@ export const mutations = {
   },
   [types.BALANCES.SAVE_ALL] (state, { payload }) {
     state.userObject.BALANCES = payload;
+  },
+  [types.TRANSACTIONS.SAVE_ALL] (state, { payload }) {
+    state.userObject.TRANSACTIONS = payload;
   },
 
   // AUTHORIZATION

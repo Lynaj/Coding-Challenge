@@ -18,3 +18,7 @@ export const RECIPIENTS = {
 export const BALANCES = {
   SAVE_ALL: 'BALANCES.SAVE_ALL',
 };
+
+export const TRANSACTIONS = {
+  SAVE_ALL: 'TRANSACTIONS.SAVE_ALL',
+};
