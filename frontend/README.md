@@ -1,4 +1,4 @@
-# cryptojobber
+# challenger
 
 > Looking for a crypto-realted job? Here it comes!
 
