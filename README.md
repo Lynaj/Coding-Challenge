@@ -30,3 +30,13 @@ The app is available at:
 ```
 http://localhost:8000/
 ```
+
+****
+In case of missing node_modules:
+
+
+```
+$ docker-compose run frontend sh
+$ npm install
+```
+
