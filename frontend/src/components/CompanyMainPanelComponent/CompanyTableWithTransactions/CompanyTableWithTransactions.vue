@@ -1,83 +1,30 @@
 <template>
 
-  <div>
+    <table class="ui celled padded table" style="width: 100%;border: 1px solid;box-shadow: 2px azure !important;">
 
-    <template v-for="item in self_store.getters['user/GET_TRANSACTIONS']">
-      item.recipient{{ item.recipient }}
-    </template>
+      <tr>
+          <th>Recipient</th>
+          <th>Sender</th>
+          <th>From Currency</th>
+          <th>To Currency</th>
+          <th>Value</th>
+          <th>Exchange Rate</th>
+          <th>Created At</th>
+          <th>Status</th>
+        </tr>
+      <tr v-for="item in self_store.getters['user/GET_TRANSACTIONS']" class="ui celled padded table">
+          <th>{{ item.recipient }}</th>
+          <th>{{ item.sender }}</th>
+          <th>{{ item.fromc }}</th>
+          <th>{{ item.toc }}</th>
+          <th>{{ item.value }}</th>
+          <th>{{ item.rate }}</th>
+          <th>{{ item.created_at }}</th>
+          <th>{{ item.status }}</th>
+      </tr>
 
-    <table class="ui celled padded table">
-      <tbody>
+  </table>
 
-      <transition name="fade">
-
-        <template v-if="tableObject.loading">
-
-          <div style="margin: auto; display: box;">
-            <circle-loader class="spinner-class" loading="loading" color="black" size=135 sizeUnit="px"/>
-          </div>
-
-        </template>
-        <template v-else>
-
-          <template v-if="numberOfTransactions > 0">
-
-            <tr>
-              <th>Recipient</th>
-              <th>Sender</th>
-              <th>From Currency</th>
-              <th>To Currency</th>
-              <th>Value</th>
-              <th>Exchange Rate</th>
-              <th>Created At</th>
-              <th>Status</th>
-            </tr>
-            <template v-for="item in self_store.getters['user/GET_TRANSACTIONS']">
-              <tr class="ui celled padded table">
-              <th>
-                {{ item.recipient }}
-              </th>
-              <th>
-                {{ item.sender }}
-              </th>
-              <th>
-                {{ item.fromc }}
-              </th>
-              <th>
-                {{ item.toc }}
-              </th>
-              <th>
-                {{ item.value }}
-              </th>
-              <th>
-                {{ item.rate }}
-              </th>
-              <th>
-                {{ item.created_at }}
-              </th>
-              <th>
-                {{ item.status }}
-              </th>
-            </tr>
-            </template>
-          </template>
-
-          <template v-else>
-            <tr class="">
-              <div class="formatted-wrong-item-icon"></div>
-              <div style="font-size: 2em; text-align: center;padding-top: 2em;padding-bottom: 3em;">
-                {{ tableObject.emptyDataListMessage }}
-              </div>
-            </tr>
-          </template>
-
-
-        </template>
-
-      </transition>
-      </tbody>
-    </table>
-  </div>
 
 </template>
 

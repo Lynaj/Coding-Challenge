@@ -1,5 +1,5 @@
 CURRENCY_TYPE = (
-    ("US Dollars", ("USD")),
-    ("Pound sterlings", ("GBP")),
-    ("EURO", ("EUR"))
+    ("USD", ("USD")),
+    ("GBP", ("GBP")),
+    ("EURO", ("EURO"))
 )

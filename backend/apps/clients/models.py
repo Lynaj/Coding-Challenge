@@ -124,7 +124,7 @@ def CreateBasicCurrencyStack(sender,
                 ClientBalance.objects.create(
                     balanceOwner=instance,
                     balanceCurrency=currency,
-                    balanceValue=0
+                    balanceValue=balanceValue
                 )
 
         except Exception as e:

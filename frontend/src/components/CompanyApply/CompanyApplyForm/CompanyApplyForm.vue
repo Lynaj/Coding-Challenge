@@ -105,7 +105,7 @@
 
                 <div data-v-3ee86246="" class="next-main-div-button stepper-button next deactivated">
 
-                  <span data-v-3ee86246="">Post</span>
+                  <span data-v-3ee86246="">Transfer</span>
 
                 </div>
 
@@ -215,43 +215,17 @@
 
 
             store.dispatch('user/initializeTransfer', obtainedData).then((response) => {
-              if (response.status == 200) {
-                this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
-                  this.$router.push('/');
-                })
+              this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
+                this.$router.push('/');
+              })
               // Lack of funds
-              } else if (response.response.status == 409 || response.status == 409) {
-                this.$swal('You do not own enough amount of money to process this transfer');
-              }
-              // Pair cannot be exchanged
-              // Liquidity is has not been provided
-              else if (response.response.status == 406 || response.status == 409) {
-                this.$swal('It is impossible to exchange given pair of currencies');
-              } else if (response.response.status == 401) {
-                let payload = {
-                  router: this.$router,
-                  swal: this.$swal
-                };
-                store.dispatch('informUserNotLoggedIn', payload);
-              } else {
-                this.$swal('Something went wrong');
-              }
               self.loading = false;
               self.METHOD_resetCurrentView()
             }).catch(error => {
-                // console.log('responseresponseresponseresponse: ' + JSON.stringify(error));
-                // // Building error message
-                // if (error.response.status == 409 || error.status == 409) {
-                //   this.$swal('You do not own enough amount of money to process this transfer');
-                // }
-                // // Pair cannot be exchanged
-                // // Liquidity is has not been provided
-                // else if (error.response.status == 406 || error.status == 409) {
-                //   this.$swal('It is impossible to exchange given pair of currencies');
-                // } else {
-              this.$swal('Something went wrong');
-                // }
 
+                this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
+                  this.$router.push('/');
+                })
               self.METHOD_resetCurrentView();
             })
           } else {
