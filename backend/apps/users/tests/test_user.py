@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from backend.apps.users.models import User
+from apps.users.models import User
 
 class UserModelTest(TestCase):
     @classmethod

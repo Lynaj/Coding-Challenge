@@ -37,6 +37,9 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'apps.users',
+    'apps.transactions',
+    'apps.currencies',
+    'apps.clients'
 ]
 
 
@@ -238,7 +241,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FileUploadParser'
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 2
+    'PAGE_SIZE': 1000
 }
 
 

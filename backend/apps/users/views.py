@@ -81,8 +81,6 @@ class UserViewSet(viewsets.ModelViewSet):
                 user.set_password(password)
                 user.save()
 
-                logger.error('User.objects.password: ' + str(user.password))
-                
                 return Response(
                     UserSerializer(user).data,
                     status=status.HTTP_201_CREATED
@@ -113,7 +111,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[request.data['email']],
             )
-            return Response(status=selftatus.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

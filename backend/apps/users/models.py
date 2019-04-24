@@ -30,7 +30,6 @@ class UserManager(BaseUserManager):
                           registered_at=timezone.now(),
                           **extra_fields)
 
-        logger.error('set_password>password: ' + str(password))
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -38,7 +37,6 @@ class UserManager(BaseUserManager):
     def create_user(self, email=None, password=None, **extra_fields):
         is_staff = extra_fields.pop('is_staff', False)
         is_superuser = extra_fields.pop('is_superuser', False)
-        logger.error('set_password>password: ' + str(password))
         return self._create_user(
             email,
             password,
