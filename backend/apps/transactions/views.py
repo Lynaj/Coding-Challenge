@@ -59,9 +59,25 @@ logger.addHandler(handler)
 
 
 class TransactionsViewSet(viewsets.ModelViewSet):
-    serializer_class = TransactionSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     parser_classes = (JSONParser,)
+
+    '''
+        * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+        * @description 
+            Re-writing this method. Its due to the fact, that
+            anonymous user cannot see nicknames of sender and/or recipient.
+            He is permitted to only view values / names of currencies 
+            in the list of recent transactions 
+        * @param -
+        * @return - Serializer
+    '''
+
+    def get_serializer_class(self):
+        if self.request.user.is_authenticated:
+            return TransactionSerializer
+        else:
+            return TransactionAnonymousSerializer
 
     '''
         * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>

@@ -52,10 +52,6 @@
           <img src="https://image.flaticon.com/icons/svg/65/65251.svg" style="background: transparent;background-color: transparent;margin: 10px 2px 10px 10px;color: transparent !important;"></div>
        </div>
 
-       <div v-on:click="resetPassword" style="display: flex;flex-direction: row;font-size: 1em !important;line-height: 3em;justify-content: space-evenly;border: 2px solid;border-radius: 6em;-webkit-box-shadow: -20px 20px 0px 0px rgba(0,0,0,0.75);box-shadow: -4px 7px 0px 3px rgba(0,0,0,0.75);margin-bottom: 2em;width: 23%;">
-          <div data-v-3ee86246="" class="next-main-div-button next deactivated" style="display: flex;flex-direction: row;border-radius: 1em;background-color: transparent !important;box-shadow: none;">
-          <img src="https://image.flaticon.com/icons/svg/66/65251.svg" style="background: transparent;background-color: transparent;margin: 10px 2px 10px 10px;color: transparent !important;"></div>
-       </div>
     </div>
 
   </div>

@@ -21,12 +21,19 @@ export const fetchAvailableCurrencies = ({ commit, state}) => {
 
 export const fetchUserTransactions = ({ commit, state }) => {
  return new Promise((resolve, reject) => {
+   if(localStorage.getItem('jwt') == null || localStorage.getItem('jwt') == "null" || localStorage.getItem('jwt') == undefined){
+     var localHeaders = {
+     };
+   } else {
+     var localHeaders = {
+       headers: {
+         Authorization: 'Bearer ' + localStorage.getItem('jwt')
+       }
+     };
+   }
+
     axios.get('/api/v1/transactions/',
-{
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('jwt')
-        }
-      }
+       localHeaders
     ).then(response => {
        commit(
           types.TRANSACTIONS.SAVE_ALL, {payload: response.data.results}

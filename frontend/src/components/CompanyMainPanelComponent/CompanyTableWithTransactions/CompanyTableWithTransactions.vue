@@ -1,8 +1,16 @@
 <template>
 
-    <table class="ui celled padded table" style="width: 100%;border: 1px solid;box-shadow: 2px azure !important;">
+  <transition name="fade">
 
-      <tr>
+    <div v-if="loading_state == true">
+      <circle-loader class="spinner-class" loading=true color="black" size="135" sizeUnit="px"/>
+    </div>
+
+    <div v-else>
+      <table class="ui celled padded table ui label"
+             style="width: auto; border: 1px solid;box-shadow: 2px azure !important; background-color: #f0f0f0;color: gray;">
+
+        <tr>
           <th>Recipient</th>
           <th>Sender</th>
           <th>From Currency</th>
@@ -12,18 +20,22 @@
           <th>Created At</th>
           <th>Status</th>
         </tr>
-      <tr v-for="item in self_store.getters['user/GET_TRANSACTIONS']" class="ui celled padded table">
-          <th>{{ item.recipient }}</th>
-          <th>{{ item.sender }}</th>
-          <th>{{ item.fromc }}</th>
-          <th>{{ item.toc }}</th>
-          <th>{{ item.value }}</th>
-          <th>{{ item.rate }}</th>
-          <th>{{ item.created_at }}</th>
-          <th>{{ item.status }}</th>
-      </tr>
+        <template v-for="item in self_store.getters['user/GET_TRANSACTIONS']" class="ui celled padded table">
+          <tr :style="METHOD_style_tr(item.status)">
 
-  </table>
+            <th>{{ item.recipient }}</th>
+            <th>{{ item.sender }}</th>
+            <th>{{ item.fromc }}</th>
+            <th>{{ item.toc }}</th>
+            <th>{{ item.value }}</th>
+            <th>{{ item.rate }}</th>
+            <th>{{ item.created_at }}</th>
+            <th>{{ item.status }}</th>
+          </tr>
+        </template>
+      </table>
+    </div>
+  </transition>
 
 
 </template>
@@ -39,6 +51,22 @@
 
   export default {
     name: 'CompanyTableWithTransactions',
+    methods: {
+      METHOD_style_tr(status) {
+        var computedStyle = '';
+        if (status !== "Failed") {
+          computedStyle = "background: #c9ffc9;";
+        } else {
+          computedStyle = "background: #ffbebe;"
+        }
+        return computedStyle
+      }
+    },
+    data() {
+      return {
+        loading_state: true
+      }
+    },
     computed: {
       self_store() {
         return store
@@ -52,7 +80,7 @@
         }
         return number;
       },
-       COMPUTED_transactions() {
+      COMPUTED_transactions() {
         return store.getters['user/GET_TRANSACTIONS'];
       }
     },
@@ -74,7 +102,7 @@
       store.dispatch('user/fetchUserTransactions').then(() => {
       }).catch((e) => {
       }).finally(() => {
-        self.tableObject.loading = false;
+        // self.loading_state = false;
       });
 
 

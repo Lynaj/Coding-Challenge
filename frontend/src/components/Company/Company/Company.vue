@@ -1,15 +1,18 @@
 <template>
   <div style="justify-content: center;display: flex;">
 
-      <sui-segments horizontal>
+      <sui-segments horizontal style="display: flex;flex-direction: column;justify-content: center;">
 
-        <template v-if="isEmpty(self_store.getters.GET_currently_viewed_transaction)">
-          <sui-segment class="company-main-info-box-segment" >
-            <company-info-box />
-          </sui-segment>
-        </template>
+        <sui-segment style="margin-top: 2em !important; margin-bottom: 2em !important;"  >
+          <company-info-box />
+        </sui-segment>
 
-        
+
+        <sui-segment style="width: 100%;display: block;margin: auto;">
+          <company-table-with-transactions id="top" />
+        </sui-segment>
+
+
       </sui-segments>
   </div>
 </template>
@@ -22,7 +25,7 @@
 
 import { store } from '../../../store/store'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
-
+import CompanyTableWithTransactions from '../../CompanyMainPanelComponent/CompanyTableWithTransactions/CompanyTableWithTransactions'
 import VueRouter from 'vue-router'
 
 export default {
@@ -65,6 +68,7 @@ export default {
   },
   components: {
     CompanyInfoBox,
+    CompanyTableWithTransactions,
     VueRouter
   },
   watch: {

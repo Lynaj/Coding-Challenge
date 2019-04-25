@@ -6,6 +6,7 @@ from generic_relations.relations import GenericRelatedField
 
 from datetime import date
 import json
+import re
 
 from apps.transactions.models import *
 from apps.misc.logger import *
@@ -39,7 +40,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     def get_status(self, instance):
         currency = None
         try:
-            currency = json.loads(instance.transactionStatusChoices)[0]
+            currency = re.split("[^a-zA-Z]*", instance.transactionStatusChoices)[1]
         except Exception as e:
             currency = 1.0
 
@@ -91,6 +92,93 @@ class TransactionSerializer(serializers.ModelSerializer):
                 + str(e)
             )
         return currency
+
+    def get_fromc(self, instance):
+        currency = None
+        try:
+            currency = instance.fromCurrency.abbreviation
+        except Exception as e:
+            currency = ""
+
+            logger.error(
+                "Something unexpected happened when in: TransactionSerializer-get_fromc: "
+                + '\n'
+                + str(e)
+            )
+        return currency
+
+    def get_toc(self, instance):
+        currency = None
+        try:
+            currency = instance.toCurrency.abbreviation
+        except Exception as e:
+            currency = ""
+
+            logger.error(
+                "Something unexpected happened when in: TransactionSerializer-get_toc: "
+                + '\n'
+                + str(e)
+            )
+        return currency
+
+class TransactionAnonymousSerializer(serializers.ModelSerializer):
+    recipient = serializers.SerializerMethodField()
+    sender = serializers.SerializerMethodField()
+    fromc = serializers.SerializerMethodField()
+    toc = serializers.SerializerMethodField()
+    rate = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Transaction
+        fields = [
+            'recipient',
+            'sender',
+            'fromc',
+            'toc',
+            'value',
+            'rate',
+            'created_at',
+            'updated_at',
+            'status'
+        ]
+
+
+    def get_status(self, instance):
+        currency = None
+        try:
+            currency = re.split("[^a-zA-Z]*", instance.transactionStatusChoices)[1]
+        except Exception as e:
+            currency = 1.0
+
+            logger.error(
+                "Something unexpected happened when in: TransactionSerializer-get_status: "
+                + '\n'
+                + str(e)
+            )
+        return currency
+
+    def get_rate(self, instance):
+        currency = None
+        try:
+            currency = instance.exchangeRate
+        except Exception as e:
+            currency = 1.0
+
+            logger.error(
+                "Something unexpected happened when in: TransactionSerializer-get_rate: "
+                + '\n'
+                + str(e)
+            )
+        return currency
+
+    def get_recipient(self, instance):
+        field = "*****"
+        return field
+
+    def get_sender(self, instance):
+        field = "*****"
+        return field
 
     def get_fromc(self, instance):
         currency = None
