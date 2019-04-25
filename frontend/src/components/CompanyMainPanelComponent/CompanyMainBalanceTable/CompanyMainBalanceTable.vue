@@ -1,7 +1,7 @@
 <template>
 
-  <div>
-    <table style="width: 100%;border: 1px solid;box-shadow: 2px azure !important;">
+    <table style="margin: auto !important;padding-top: 3em;">
+      <tbody class="ui vertical labeled menu">
         <tr>
           <th>Balance</th>
           <th>Currency</th>
@@ -10,8 +10,8 @@
           <th>{{ balance.value }}</th>
           <th>{{ balance.currency }}</th>
         </tr>
+      </tbody>
     </table>
-  </div>
 
 </template>
 

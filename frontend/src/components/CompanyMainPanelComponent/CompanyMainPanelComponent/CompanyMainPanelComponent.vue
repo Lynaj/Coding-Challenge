@@ -39,7 +39,11 @@
         <template v-if="windowWidth >= 1200">
            <sui-segment class="company-main-info-box-segment" >
             <company-info-box />
+            <!--    balance table-->
+            <company-main-balance-table></company-main-balance-table>
+
           </sui-segment>
+
         </template>
 
 
@@ -59,6 +63,7 @@ import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
 import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import CompanyMainMenuBoxComponent from '../CompanyMainMenuBoxComponent/CompanyMainMenuBoxComponent.vue'
 import CompanyTableWithTransactions from '../CompanyTableWithTransactions/CompanyTableWithTransactions.vue'
+import CompanyMainBalanceTable from '../CompanyMainBalanceTable/CompanyMainBalanceTable.vue'
 import VueRouter from 'vue-router'
 var VueScrollTo = require('vue-scrollto');
 
@@ -169,6 +174,7 @@ export default {
     }
   },
   components: {
+    CompanyMainBalanceTable,
     CompanyInfoBox,
     CompanyApplyForm,
     VueRouter,

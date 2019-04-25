@@ -14,8 +14,6 @@
       Logout
     </a>
 
-<!--    balance table-->
-    <company-main-balance-table></company-main-balance-table>
   </div>
 
 </template>
@@ -29,7 +27,6 @@
 import { store } from '../../../store/store'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
 import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
-import CompanyMainBalanceTable from '../CompanyMainBalanceTable/CompanyMainBalanceTable.vue'
 import VueRouter from 'vue-router'
 
 export default {
@@ -87,7 +84,6 @@ export default {
   watch: {
   },
   components: {
-    CompanyMainBalanceTable,
     CompanyInfoBox,
     CompanyApplyForm,
     VueRouter
