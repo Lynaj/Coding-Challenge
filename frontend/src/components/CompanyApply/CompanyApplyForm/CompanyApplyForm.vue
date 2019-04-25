@@ -199,18 +199,15 @@
 
         if(matchedBalance !== undefined) {
           // checking if user has enough funds to process this transfer
-          if(
-            matchedBalance[0].value >= transferValue
-          ) {
-            return true
+          if(matchedBalance[0].value >= transferValue) {
+            return true;
           } else {
-            return false
+            return false;
           }
         } else {
-          return false
+          return false;
         }
-      }
-    }
+      },
       initializeTransfer() {
         var self = this
         this.$v.$touch()
@@ -222,7 +219,7 @@
             localStorage.getItem('loggedIn').toString() == "true"
           ) {
 
-            if(METHOD_checkBalance(self.form.fromCurrency, self.form.value) == true) {
+            if(this.METHOD_checkBalance(self.form.fromCurrency, self.form.value) == true) {
               var obtainedData = {
                 data: self.form,
                 token: localStorage.getItem('jwt')
@@ -233,20 +230,14 @@
                 this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
                   this.$router.push('/');
                 })
-                // Lack of funds
                 self.loading = false;
                 self.METHOD_resetCurrentView()
               }).catch(error => {
-
-                  this.$swal('Oopss! Something went wrong')
-                    // () => {
-                    // this.$router.push('/');
-                  // })
-                // self.METHOD_resetCurrentView();
-              // })
-            } else {
-              this.$route.push(store.getters.GET_LINKS_OBJECT.job_offers);
-            }
+                this.$swal('Oopss! Something went wrong')
+              })
+            // } else {
+            //   this.$route.push(store.getters.GET_LINKS_OBJECT.job_offers);
+            // }
             } else {
               this.$swal('You have to raise more capital before processing this transfer.')
             }
@@ -269,6 +260,7 @@
               }
             }, 100
           );
+          }
         }
       }
     },
