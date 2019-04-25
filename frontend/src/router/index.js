@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import Company from '@/components/Company/Company/Company.vue'
 import CompanyInfoBox from '@/components/CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
 import CompanyMainPanelComponent from '@/components/CompanyMainPanelComponent/CompanyMainPanelComponent/CompanyMainPanelComponent.vue'
-import CompanyDetailedView from '@/components/CompanyDetailedView/CompanyDetailedView.vue'
 
 Vue.use(Router);
 
@@ -32,14 +31,6 @@ let router = new Router({
         meta: { 
             requiresAuth: true
         }
-      },
-      {
-        path: '/applications/:job_offer_title',
-        name: 'job_applicants_linked_to_particular_job_offer',
-        component: CompanyMainPanelComponent,
-        meta: { 
-            requiresAuth: true
-        }
       }, {
         path: 'create',
         name: 'jobcreator',
@@ -47,23 +38,8 @@ let router = new Router({
         meta: {
             requiresAuth: true
         }
-      }, {
-        path: 'information',
-        name: 'menuinformation',
-        component: CompanyMainPanelComponent,
-        meta: {
-            requiresAuth: true
-        }
       }
       ]
-    },
-    { 
-      path: '/company/:company_name', 
-      name: 'company_detailed', 
-      component: CompanyDetailedView,
-      meta: { 
-          guest: true
-      }
     },
     { 
       path: '/', 

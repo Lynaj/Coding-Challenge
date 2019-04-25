@@ -98,7 +98,27 @@ class ClientBalance(models.Model):
     * @return -
 '''
 
+
 def CreateBasicCurrencyStack(sender,
+                        instance,
+                        **kwargs):
+    try:
+        # Making sure there exist at least one currency in the system
+        queriedCurrencies = Currency.objects.all()
+        if(queriedCurrencies.count() == 0):
+            Currency.objects.create(name="USD", abbreviation="USD", defaultSystemCurrency=True)
+            Currency.objects.create(name="GBP", abbreviation="GBP", defaultSystemCurrency=False)
+            Currency.objects.create(name="EURO", abbreviation="EURO", defaultSystemCurrency=False)
+
+    except Exception as e:
+        logger.error(
+            '[*** TRIGGER ***] [ ERROR ] [ CreateBasicCurrencyStack ] '
+            +
+            'Problem: exception occured during the process of creating basic Currencies objects'
+            + 'error: ' + str(e)
+        )
+
+def LinkBasicCurrencyStack(sender,
                         instance,
                         created,
                         raw,
@@ -108,12 +128,6 @@ def CreateBasicCurrencyStack(sender,
     if created:
 
         try:
-            # Making sure there exist at least one currency in the system
-            queriedCurrencies = Currency.objects.all()
-            if(queriedCurrencies.count() == 0):
-                Currency.objects.create(name="USD", abbreviation="USD", defaultSystemCurrency=True)
-                Currency.objects.create(name="GBP", abbreviation="GBP", defaultSystemCurrency=False)
-                Currency.objects.create(name="EURO", abbreviation="EURO", defaultSystemCurrency=False)
 
             for currency in Currency.objects.all():
                 '''
@@ -135,7 +149,7 @@ def CreateBasicCurrencyStack(sender,
 
         except Exception as e:
             logger.error(
-                '[*** TRIGGER ***] [ ERROR ] [ CreateBasicCurrencyStack ] '
+                '[*** TRIGGER ***] [ ERROR ] [ LinkBasicCurrencyStack ] '
                 +
                 'Problem: exception occured during the process of creating ClientBalance'
                 + 'error: ' + str(e)
@@ -181,6 +195,7 @@ def CreateBasicClientObject(sender,
                 'Problem: exception occured during the process of creating ClientBalance'
                 + 'error: ' + str(e)
             )
+post_save.connect(LinkBasicCurrencyStack, sender=Client)
 
-post_save.connect(CreateBasicCurrencyStack, sender=Client)
+pre_save.connect(CreateBasicCurrencyStack, sender=User)
 post_save.connect(CreateBasicClientObject, sender=User)

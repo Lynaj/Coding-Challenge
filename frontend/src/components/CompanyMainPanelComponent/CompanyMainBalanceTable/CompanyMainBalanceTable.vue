@@ -33,11 +33,11 @@ export default {
   mounted () {
     var self = this;
 
-    setInterval(function(){
-      store.dispatch('user/fetchUserBalances').then(() => {
-      }).catch((e) => {
-      });
-    }, 1000);
+    // setInterval(function(){
+    store.dispatch('user/fetchUserBalances').then(() => {
+    }).catch((e) => {
+    });
+    // }, 1000);
 
 
     window.addEventListener('resize', () => {

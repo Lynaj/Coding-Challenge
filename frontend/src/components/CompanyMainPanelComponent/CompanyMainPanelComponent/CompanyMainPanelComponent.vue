@@ -55,11 +55,9 @@
 <script type="text/javascript">
 
 import { store } from '../../../store/store'
-import CompanyFilterComponentList from '../../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
 import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import CompanyMainMenuBoxComponent from '../CompanyMainMenuBoxComponent/CompanyMainMenuBoxComponent.vue'
-import CompanyMainPanelCompanyInformation from '../CompanyMainPanelCompanyInformation/CompanyMainPanelCompanyInformation.vue'
 import CompanyTableWithTransactions from '../CompanyTableWithTransactions/CompanyTableWithTransactions.vue'
 import VueRouter from 'vue-router'
 var VueScrollTo = require('vue-scrollto');
@@ -156,7 +154,7 @@ export default {
       return this.$route.name
     },
     COMPUTED_currently_viewed_job_offer () {
-      return store.getters.GET_currently_viewed_job_offer
+      return store.getters.GET_currently_viewed_transaction
     },
     COMPUTED_local_currently_viewed_job_offer () {
       return this.currently_viewed_job_offer
@@ -171,14 +169,12 @@ export default {
     }
   },
   components: {
-    CompanyFilterComponentList,
     CompanyInfoBox,
     CompanyApplyForm,
     VueRouter,
     VueScrollTo,
     CompanyTableWithTransactions,
-    CompanyMainMenuBoxComponent,
-    CompanyMainPanelCompanyInformation
+    CompanyMainMenuBoxComponent
   },
   watch: {
   }

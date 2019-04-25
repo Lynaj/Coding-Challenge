@@ -125,15 +125,11 @@ export default {
       var self = this
       this.$v.$touch()
       if (!self.$v.$invalid) {
-        // self.$refs.recaptcha.execute()
-        // console.log('zrobilem executed captche')
         var obtainedData = {
           token: self.form,
           router: this.$router
         }
         self.loading = true
-        // console.log('onCaptchaVerified: ' + recaptchaToken)
-        // obtainedData.recaptchaToken = recaptchaToken
         store.dispatch('loginUser', obtainedData).then(() => {
           self.loading = false;
         }).catch(error => {

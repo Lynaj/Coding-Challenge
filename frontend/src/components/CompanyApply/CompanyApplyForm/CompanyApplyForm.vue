@@ -54,19 +54,6 @@
                       <label class="label">From Currency</label>
                       <div class="control">
                         <multiselect style="max-width: 50% !important;"
-                                     :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.toCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
-                                     :searchable="true" :close-on-select="true" :show-labels="false"
-                                     placeholder="Choose proper currency" :multiple="false" v-model="form.toCurrency"
-                                     :options="arrayOfCurrencies"></multiselect>
-                      </div>
-                      <p v-if="$v.form.toCurrency.$error" class="help is-danger">This field is required.</p>
-                    </div>
-
-
-                    <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
-                      <label class="label">To Currency</label>
-                      <div class="control">
-                        <multiselect style="max-width: 50% !important;"
                                      :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.fromCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
                                      :searchable="true" :close-on-select="true" :show-labels="false"
                                      placeholder="Choose proper currency" :multiple="false" v-model="form.fromCurrency"
@@ -75,6 +62,17 @@
                       <p v-if="$v.form.fromCurrency.$error" class="help is-danger">This field is required.</p>
                     </div>
 
+                    <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
+                      <label class="label">To Currency</label>
+                      <div class="control">
+                        <multiselect style="max-width: 50% !important;"
+                                     :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.toCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
+                                     :searchable="true" :close-on-select="true" :show-labels="false"
+                                     placeholder="Choose proper currency" :multiple="false" v-model="form.toCurrency"
+                                     :options="arrayOfCurrencies"></multiselect>
+                      </div>
+                      <p v-if="$v.form.toCurrency.$error" class="help is-danger">This field is required.</p>
+                    </div>
 
                     <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
                       <label class="label">Transaction Value</label>
@@ -132,7 +130,6 @@
 <script type="text/javascript">
   import {store} from '../../../store/store'
   import HorizontalStepper from 'vue-stepper'
-  import ComponentApplyFormSecondStep from './ComponentApplyFormSecondStep/ComponentApplyFormSecondStep.vue'
   import VueSwal from 'vue-swal'
   import {validationMixin} from 'vuelidate'
   import {required, email, minLength, between} from 'vuelidate/lib/validators'
@@ -189,48 +186,72 @@
       VueSwal,
       Vuelidate,
       'dropdown': dropdown,
-      ComponentApplyFormSecondStep,
       VueRecaptcha
     },
     methods: {
       METHOD_resetCurrentView() {
         store.commit('MUTATE_currentAction', '')
       },
+      METHOD_checkBalance(fromCurrency, transferValue) {
+        var matchedBalance = store.getters['user/GET_BALANCES'].filter(
+          queriedBalance => queriedBalance.currency == fromCurrency
+        );
+
+        if(matchedBalance !== undefined) {
+          // checking if user has enough funds to process this transfer
+          if(
+            matchedBalance[0].value >= transferValue
+          ) {
+            return true
+          } else {
+            return false
+          }
+        } else {
+          return false
+        }
+      }
+    }
       initializeTransfer() {
         var self = this
         this.$v.$touch()
-        // making sure that user is logged in
+        // is logged in
         if (!self.$v.$invalid) {
-
           if (
             localStorage.getItem('jwt') !== null
             &&
             localStorage.getItem('loggedIn').toString() == "true"
           ) {
 
-            var obtainedData = {
-              data: self.form,
-              token: localStorage.getItem('jwt')
-            };
+            if(METHOD_checkBalance(self.form.fromCurrency, self.form.value) == true) {
+              var obtainedData = {
+                data: self.form,
+                token: localStorage.getItem('jwt')
+              };
 
 
-            store.dispatch('user/initializeTransfer', obtainedData).then((response) => {
-              this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
-                this.$router.push('/');
-              })
-              // Lack of funds
-              self.loading = false;
-              self.METHOD_resetCurrentView()
-            }).catch(error => {
-
+              store.dispatch('user/initializeTransfer', obtainedData).then((response) => {
                 this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
                   this.$router.push('/');
                 })
-              self.METHOD_resetCurrentView();
-            })
-          } else {
-            this.$route.push(store.getters.GET_LINKS_OBJECT.job_offers);
-          }
+                // Lack of funds
+                self.loading = false;
+                self.METHOD_resetCurrentView()
+              }).catch(error => {
+
+                  this.$swal('Oopss! Something went wrong')
+                    // () => {
+                    // this.$router.push('/');
+                  // })
+                // self.METHOD_resetCurrentView();
+              // })
+            } else {
+              this.$route.push(store.getters.GET_LINKS_OBJECT.job_offers);
+            }
+            } else {
+              this.$swal('You have to raise more capital before processing this transfer.')
+            }
+
+
         } else {
 
           setTimeout(

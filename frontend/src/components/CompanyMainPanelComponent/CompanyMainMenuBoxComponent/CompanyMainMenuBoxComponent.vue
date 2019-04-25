@@ -27,7 +27,6 @@
 <script type="text/javascript">
 
 import { store } from '../../../store/store'
-import CompanyFilterComponentList from '../../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
 import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
 import CompanyMainBalanceTable from '../CompanyMainBalanceTable/CompanyMainBalanceTable.vue'
@@ -37,8 +36,7 @@ export default {
   name: 'CompanyMainMenuBoxComponent',
   data () {
     return {
-      windowWidth: window.innerWidth,
-      currently_viewed_job_offer: {}
+      windowWidth: window.innerWidth
     }
   },
   props: {
@@ -82,24 +80,14 @@ export default {
         return 'ui vertical labeled menu';
       }
     },
-    COMPUTED_currently_viewed_job_offer () {
-      return store.getters.GET_currently_viewed_job_offer
-    },
-    COMPUTED_local_currently_viewed_job_offer () {
-      return this.currently_viewed_job_offer
-    },
     self_store () {
       return store
     }
   },
   watch: {
-    COMPUTED_currently_viewed_job_offer (newObject, oldObject) {
-      this.currently_viewed_job_offer = newObject
-    }
   },
   components: {
     CompanyMainBalanceTable,
-    CompanyFilterComponentList,
     CompanyInfoBox,
     CompanyApplyForm,
     VueRouter

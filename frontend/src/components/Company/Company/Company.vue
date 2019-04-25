@@ -3,7 +3,7 @@
 
       <sui-segments horizontal>
 
-        <template v-if="isEmpty(self_store.getters.GET_currently_viewed_job_offer)">
+        <template v-if="isEmpty(self_store.getters.GET_currently_viewed_transaction)">
           <sui-segment class="company-main-info-box-segment" >
             <company-info-box />
           </sui-segment>
@@ -21,10 +21,7 @@
 <script type="text/javascript">
 
 import { store } from '../../../store/store'
-import CompanyFilterComponentList from '../../CompanyFilter/CompanyFilterComponentList/CompanyFilterComponentList.vue'
 import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
-import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
-import ClientApplyForm from '../../CompanyApply/ClientApplyForm/ClientApplyForm.vue'
 
 import VueRouter from 'vue-router'
 
@@ -60,26 +57,14 @@ export default {
     })
   },
   computed: {
-    COMPUTED_currently_viewed_job_offer () {
-      return store.getters.GET_currently_viewed_job_offer
-    },
-    COMPUTED_local_currently_viewed_job_offer () {
-      return this.currently_viewed_job_offer
-    },
     self_store () {
       return store
     }
   },
   watch: {
-    COMPUTED_currently_viewed_job_offer (newObject, oldObject) {
-      this.currently_viewed_job_offer = newObject
-    }
   },
   components: {
-    ClientApplyForm,
-    CompanyFilterComponentList,
     CompanyInfoBox,
-    CompanyApplyForm,
     VueRouter
   },
   watch: {

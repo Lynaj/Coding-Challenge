@@ -108,4 +108,4 @@ def SecurePlatformOnlyOneDefaultCurrencyAllowed(sender,
 
 
 
-post_save.connect(SecurePlatformOnlyOneDefaultCurrencyAllowed, sender=Currency)
+# post_save.connect(SecurePlatformOnlyOneDefaultCurrencyAllowed, sender=Currency)
