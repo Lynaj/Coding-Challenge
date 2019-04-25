@@ -28,6 +28,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'django_celery_beat',
+    'cosmic_ray',
     'rest_framework',
     'corsheaders',
     'django_extensions',

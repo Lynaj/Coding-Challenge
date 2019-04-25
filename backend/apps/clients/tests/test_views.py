@@ -134,8 +134,8 @@ class CompanyViewSetTestCase(APITestCase):
         test_payload = {
             "fromCurrency": self.queriedCurrencies[0].abbreviation,
             "toCurrency": self.queriedCurrencies[1].abbreviation,
-            "toUser": self.test_second_user.email,
-            "transactionValue": transferValue
+            "recipient": self.test_second_user.email,
+            "value": transferValue
         }
 
         response = self.client.post(
@@ -183,8 +183,8 @@ class CompanyViewSetTestCase(APITestCase):
         test_payload = {
             "fromCurrency": self.queriedCurrencies[0].abbreviation,
             "toCurrency": self.queriedCurrencies[1].abbreviation,
-            "toUser": self.test_second_user.email,
-            "transactionValue": transferValue
+            "recipient": self.test_second_user.email,
+            "value": transferValue
         }
 
         response = self.client.post(

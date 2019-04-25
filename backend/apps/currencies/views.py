@@ -18,9 +18,7 @@ from apps.misc.logger import *
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
 
-
 class CurrencyViewSet(viewsets.ModelViewSet):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
     permission_classes = []
-
