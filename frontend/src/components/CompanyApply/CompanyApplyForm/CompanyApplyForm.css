@@ -134,11 +134,15 @@ img.preview {
 
 
 @media only screen and (max-width: 468px) {
-	.div-remote-class-control {
-		margin-top: 0.3em;
-	}
-  .label-formatted-equity-checkbox {
+    .input-input-box-div-text {
+      font-size: 1.3em;
+      width: 10em !important;
+    }
 
+    .div-remote-class-control {
+        margin-top: 0.3em;
+    }
+  .label-formatted-equity-checkbox {
     margin-left: 2.2em;
     text-align: center;
     padding-right: 1.1em;
@@ -238,6 +242,7 @@ img.preview {
 
   .ui-input-box-div-text {
     font-size: 1.3em;
+    width: 13em !important;
   }
 
   .div-location-field {
@@ -249,9 +254,14 @@ img.preview {
 }
 
 @media only screen and (min-width: 468px) and (max-width: 666px) {
-	.div-remote-class-control {
-		margin-top: 0.3em;
-	}
+    .input-input-box-div-text {
+      font-size: 1.3em;
+      width: 10em !important;
+    }
+
+    .div-remote-class-control {
+        margin-top: 0.3em;
+    }
   .label-formatted-equity-checkbox {
 
     margin-left: 2.2em;
@@ -353,6 +363,7 @@ img.preview {
 
   .ui-input-box-div-text {
     font-size: 1.3em;
+    width: 13em !important;
   }
 
   .div-location-field {
@@ -364,9 +375,14 @@ img.preview {
 }
 
 @media only screen and (min-width: 667px) and (max-width: 766px) {
-	.div-remote-class-control {
-		margin-top: 0.3em;
-	}
+    .input-input-box-div-text {
+      font-size: 1.3em;
+      width: 10em !important;
+    }
+
+    .div-remote-class-control {
+        margin-top: 0.3em;
+    }
   .label-formatted-equity-checkbox {
 
     margin-left: 2.2em;
@@ -468,6 +484,7 @@ img.preview {
 
   .ui-input-box-div-text {
     font-size: 1.3em;
+    width: 26em !important;
   }
 
   .div-location-field {
@@ -480,9 +497,14 @@ img.preview {
 
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-	.div-remote-class-control {
-		margin-top: 0.3em;
-	}
+    .input-input-box-div-text {
+      font-size: 1.3em;
+      width: 12em !important;
+    }
+
+    .div-remote-class-control {
+        margin-top: 0.3em;
+    }
   .label-formatted-equity-checkbox {
 
     margin-left: 2.2em;
@@ -584,6 +606,7 @@ img.preview {
 
   .ui-input-box-div-text {
     font-size: 1.3em;
+    width: 26em !important;
   }
 
   .div-location-field {
@@ -595,9 +618,14 @@ img.preview {
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
-	.div-remote-class-control {
-		margin-top: 0.3em;
-	}
+    .input-input-box-div-text {
+      font-size: 1.3em;
+      width: 33em !important;
+    }
+
+    .div-remote-class-control {
+        margin-top: 0.3em;
+    }
   .label-formatted-equity-checkbox {
 
     margin-left: 2.2em;
@@ -698,6 +726,7 @@ img.preview {
 
   .ui-input-box-div-text {
     font-size: 1.3em;
+    width: 30em !important;
   }
 
   .div-location-field {
@@ -709,9 +738,14 @@ img.preview {
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1919px) {
-	.div-remote-class-control {
-		margin-top: 0.5em;
-	}
+    .input-input-box-div-text {
+      font-size: 1.3em;
+      width: 33em !important;
+    }
+
+    .div-remote-class-control {
+        margin-top: 0.5em;
+    }
   .label-formatted-equity-checkbox {
 
     margin-left: 2.3em;
@@ -816,6 +850,7 @@ img.preview {
 
   .ui-input-box-div-text {
     font-size: 1.3em;
+    width: 35em !important;
   }
 
   .div-location-field {
@@ -826,18 +861,23 @@ img.preview {
   }
 
   .ui-input-box-div-textbox {
-		max-width: 368px;
+        max-width: 368px;
     font-size: 0.69em !important;
     height: 153px;
     width: 590px;
     min-width: 368px;
-	}
+    }
 }
 
 @media only screen and (min-width: 1920px) {
-	.div-remote-class-control {
-		margin-top: 0.5em;
-	}
+    .input-input-box-div-text {
+      font-size: 1.3em;
+      width: 33em !important;
+    }
+
+    .div-remote-class-control {
+        margin-top: 0.5em;
+    }
   .label-formatted-equity-checkbox {
 
     margin-left: 2.3em;
@@ -942,16 +982,17 @@ img.preview {
 
   .ui-input-box-div-text {
     font-size: 1.3em;
+    width: 35em !important;
   }
 
 
-	.ui-input-box-div-textbox {
-		max-width: 368px;
+    .ui-input-box-div-textbox {
+        max-width: 368px;
     font-size: 0.69em !important;
     height: 153px;
     width: 590px;
     min-width: 368px;
-	}
+    }
 
   .div-location-field {
     display: flex;

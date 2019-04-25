@@ -40,8 +40,7 @@
                     <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
                       <label class="label">Recipient</label>
                       <div class="control">
-                        <multiselect style="max-width: 50% !important;"
-                                     :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.recipient.$error) ? 'ui-input-box-div-is-danger' : '']"
+                        <multiselect :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.recipient.$error) ? 'ui-input-box-div-is-danger' : '']"
                                      :searchable="true" :close-on-select="true" :show-labels="false"
                                      placeholder="Choose recipient email" :multiple="false" v-model="form.recipient"
                                      :options="arrayOfRecipients"></multiselect>
@@ -53,8 +52,7 @@
                     <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
                       <label class="label">From Currency</label>
                       <div class="control">
-                        <multiselect style="max-width: 50% !important;"
-                                     :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.fromCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
+                        <multiselect :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.fromCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
                                      :searchable="true" :close-on-select="true" :show-labels="false"
                                      placeholder="Choose proper currency" :multiple="false" v-model="form.fromCurrency"
                                      :options="arrayOfCurrencies"></multiselect>
@@ -65,8 +63,7 @@
                     <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
                       <label class="label">To Currency</label>
                       <div class="control">
-                        <multiselect style="max-width: 50% !important;"
-                                     :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.toCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
+                        <multiselect :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.toCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
                                      :searchable="true" :close-on-select="true" :show-labels="false"
                                      placeholder="Choose proper currency" :multiple="false" v-model="form.toCurrency"
                                      :options="arrayOfCurrencies"></multiselect>
@@ -77,8 +74,9 @@
                     <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
                       <label class="label">Transaction Value</label>
                       <div class="control">
+
                         <input placeholder="5000"
-                               :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.value.$error) ? 'ui-input-box-div-is-danger' : '']"
+                               :class="['input ui-input-box-div input-input-box-div-text', ($v.form.value.$error) ? 'ui-input-box-div-is-danger' : '']"
                                type="text" style="width: 80%;"
                                v-model="form.value">
                       </div>
