@@ -28,6 +28,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'django_celery_beat',
+    'silk',
     'rest_framework',
     'corsheaders',
     'django_extensions',
@@ -57,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'silk.middleware.SilkyMiddleware'
 ]
 
 # DEBUG
@@ -297,3 +299,7 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(hours=10),
     'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
 }
+
+
+SILKY_PYTHON_PROFILER = True
+SILKY_PYTHON_PROFILER_BINARY = True

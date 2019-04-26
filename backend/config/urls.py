@@ -21,3 +21,6 @@ urlpatterns = [
 
     path('api/v1/', include((api.urls, 'api')))
 ]
+
+# Silk: stress testing software
+urlpatterns += [url(r'^silk/', include('silk.urls', namespace='silk'))]
