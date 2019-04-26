@@ -33,6 +33,9 @@ yarn-error.log*
 nosetests.xml
 htmlcov
 
+# Front-end coverage reports
+frontend/test/unit/coverage
+
 # Translations
 *.mo
 *.pot
