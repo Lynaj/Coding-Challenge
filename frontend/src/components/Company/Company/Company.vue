@@ -32,37 +32,16 @@ export default {
   name: 'Company',
   data () {
     return {
-      windowWidth: window.innerWidth,
-      currently_viewed_job_offer: {}
     }
   },
   props: {
 
   },
   methods: {
-    isEmpty: function (obj) {
-      for (var key in obj) {
-        if (obj.hasOwnProperty(key)) { return false }
-      }
-      return true
-    },
-    METHOD_change_path: function (nameOfThePath) {
-      if (nameOfThePath == 'login') {
-        store.commit('MUTATE_currentAction', 'login')
-      }
-      this.$router.push(nameOfThePath)
-    }
   },
   mounted () {
-    window.addEventListener('resize', () => {
-      this.windowWidth = window.innerWidth
-      console.log(this.isMobile)
-    })
   },
   computed: {
-    self_store () {
-      return store
-    }
   },
   watch: {
   },
@@ -74,10 +53,6 @@ export default {
   watch: {
   },
   created () {
-    store.dispatch('fetchJobTypes').then(() => {
-      store.dispatch('fetchCompaniesAndJobs').then(() => {
-      })
-    })
   }
 }
 
