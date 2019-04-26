@@ -16,7 +16,7 @@ module.exports = {
       'webdriver.chrome.driver': require('chromedriver').path
     }
   },
-
+moduleNameMapper
   test_settings: {
     default: {
       selenium_port: 4444,
