@@ -4,7 +4,7 @@
 
       <div :class="COMPUTED_horizontalVerticalClass" >
 
-        <sui-segment class="div-class-company-main-menu-box-component"  >
+        <sui-segment class="div-class-company-main-menu-box-component">
 
           <template v-if="windowWidth >= 1200">
             <company-main-menu-box-component @changedMenuItem="METHOD_change_path_menu" :menuItems="localMenuItems" class="div-class-company-main-menu-box-component"/>

@@ -70,18 +70,6 @@
     computed: {
       self_store() {
         return store
-      },
-      numberOfTransactions() {
-        var number = 0;
-        try {
-          number = store.getters['user/GET_TRANSACTIONS'].length;
-        } catch (e) {
-          number = 0;
-        }
-        return number;
-      },
-      COMPUTED_transactions() {
-        return store.getters['user/GET_TRANSACTIONS'];
       }
     },
     components: {
@@ -102,14 +90,8 @@
       store.dispatch('user/fetchUserTransactions').then(() => {
       }).catch((e) => {
       }).finally(() => {
-        // self.loading_state = false;
       });
 
-
-      window.addEventListener('resize', () => {
-        this.windowWidth = window.innerWidth;
-        console.log(this.isMobile)
-      })
     },
 
   }

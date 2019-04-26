@@ -23,8 +23,10 @@ module.exports = {
   ],
   transformIgnorePatterns: [
       "<rootDir>/node_modules/(?!(babel-jest|jest-vue-preprocessor)/)",
-      "<rootDir>/node_modules/",
+      "<rootDir>/node_modules/.*",
       "/node_modules/.*",
+      "/app/node_modules/vue-stepper/(.*?)",
+      "/app/node_modules/.*",
       "node_modules/(?!(babel-jest|jest-vue-preprocessor)/)"
   ],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
@@ -38,23 +40,4 @@ module.exports = {
     '!src/router/index.js',
     '!**/node_modules/**'
   ]
-}
-//
-// module.exports = {
-//   rootDir: path.resolve(__dirname, '../../'),
-//   moduleFileExtensions: ['js', 'jsx', 'json', 'vue'],
-//   transform: {
-//     '^.+\\.vue$': 'vue-jest',
-//     // '.+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$':
-//     //   'jest-transform-stub',
-//     '^.+\\.(js|jsx)?$': 'babel-jest'
-//   },
-//   moduleNameMapper: {
-//     '^@/(.*)$': '<rootDir>/src/$1'
-//   },
-//   snapshotSerializers: ['jest-serializer-vue'],
-//   testMatch: [
-//     '<rootDir>/(test/unit/**/*.spec.(js|jsx|ts|tsx)|**/__test__/*.(js|jsx|ts|tsx))'
-//   ],
-//   transformIgnorePatterns: ['<rootDir>/node_modules/']
-// };
+};

@@ -54,7 +54,6 @@
     name: 'CompanyInfoBox',
     data() {
       return {
-        windowWidth: window.innerWidth
       }
     },
     props: {},
@@ -67,13 +66,6 @@
     computed: {
       self_store() {
         return store
-      },
-      COMPUTED_styleMainDiv() {
-        if (this.windowWidth <= 1300) {
-          return `display: flex; justify-content: center; justify-content: center; display: flex;position: sticky;top: 0px;z-index: 100;`
-        } else {
-          return `justify-content: center; display: flex;position: sticky;top: 0px;z-index: 100;`
-        }
       }
     },
     methods: {
@@ -90,9 +82,6 @@
       }
     },
     mounted() {
-      window.addEventListener('resize', () => {
-        this.windowWidth = window.innerWidth
-      })
     },
   }
 
