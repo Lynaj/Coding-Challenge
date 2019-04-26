@@ -18,9 +18,6 @@ module.exports = {
     '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest',
     "^.+\\.(js|jsx)?$": "<rootDir>/node_modules/babel-jest"
   },
-  testPathIgnorePatterns: [
-    '<rootDir>/test/e2e'
-  ],
   transformIgnorePatterns: [
       "<rootDir>/node_modules/(?!(babel-jest|jest-vue-preprocessor)/)",
       "<rootDir>/node_modules/.*",

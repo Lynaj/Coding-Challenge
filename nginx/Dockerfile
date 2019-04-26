@@ -1,3 +1,6 @@
+# Stage 0 - installing stress test software
+RUN apt-get update && apt-get install siege 
+
 # Stage 1 - build frontend app
 FROM node:10-alpine as build-deps
 
