@@ -30,3 +30,24 @@ The app is available at:
 ```
 http://localhost:8000/
 ```
+
+
+## Test
+```
+docker-compose -f docker-compose-test.yml up
+```
+
+Reports:
+
+  >Silk: http://localhost:8000/silk
+  
+  >Locust:
+  http://127.0.0.1:8089
+  
+  >Jest:
+  frontend > test > unit > coverage > src > index.html
+  
+  >Nightwatch:
+  frontend > test > e2e > reports
+  
+  >Unittest ( django ):  

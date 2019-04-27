@@ -26,6 +26,9 @@ module.exports = {
       "/app/node_modules/.*",
       "node_modules/(?!(babel-jest|jest-vue-preprocessor)/)"
   ],
+  testPathIgnorePatterns: [
+    '<rootDir>/test/e2e/specs'
+  ],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
   coverageDirectory: '<rootDir>/test/unit/coverage',
