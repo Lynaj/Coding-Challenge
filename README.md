@@ -44,10 +44,24 @@ Reports:
   >Locust:
   http://127.0.0.1:8089
   
-  >Jest:
-  frontend > test > unit > coverage > src > index.html
+  >Jest: frontend/test/unit/coverage/src/index.html
   
-  >Nightwatch:
-  frontend > test > e2e > reports
+  >Nightwatch: frontend/test/e2e/reports
   
-  >Unittest ( django ):  
+  >Unittest ( django ): backend/htmlcov/index.html
+  
+## Single Component Testing ( front-end )
+
+```
+docker-compose run frontend sh
+npm run nightwatch
+npm run test
+```
+
+  
+## Single Component Testing ( back-end )
+
+```
+docker-compose run backend sh
+python manage.py test
+```
