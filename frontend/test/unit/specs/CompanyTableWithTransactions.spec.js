@@ -2,10 +2,9 @@ import { mount } from '@vue/test-utils'
 import Vue from 'vue'
 import CompanyTableWithTransactions from '../../../src/components/CompanyMainPanelComponent/CompanyTableWithTransactions/CompanyTableWithTransactions'
 import SuiVue from "semantic-ui-vue";
-import Notifications from 'vue-notification'
+
 
 Vue.use(SuiVue);
-Vue.use(Notifications);
 
 
 describe('CompanyTableWithTransactions.vue', () => {

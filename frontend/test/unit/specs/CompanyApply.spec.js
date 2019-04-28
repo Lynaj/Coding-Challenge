@@ -1,17 +1,15 @@
-import { mount } from '@vue/test-utils'
+import {mount} from '@vue/test-utils'
 import Vue from 'vue'
 import CompanyApply from '../../../src/components/CompanyApply/CompanyApplyForm/CompanyApplyForm'
 import SuiVue from "semantic-ui-vue";
-import Notifications from 'vue-notification'
 
 Vue.use(SuiVue);
-Vue.use(Notifications);
 
 
 describe('CompanyApplyForm.vue', () => {
 
   it('renders the correct version of view', () => {
-  const wrapper = mount(CompanyApply);
+    const wrapper = mount(CompanyApply);
     expect(wrapper.html()).toContain('From Currency');
     expect(wrapper.html()).toContain('Recipient');
     expect(wrapper.html()).toContain('To Currency');
@@ -19,18 +17,38 @@ describe('CompanyApplyForm.vue', () => {
     expect(wrapper.html()).toContain('Transfer');
   });
 
-  it('contains proper number of recipients', () => {
-    const wrapper = mount(CompanyApplyForm({
-      arrayOfRecipients: ["John"]
-    }));
-    expect(wrapper.html()).toContain('<span>John</span>');
-  })
+  it('creation of a transaction without necessary data', () => {
+    const wrapper = mount(CompanyApply);
 
+    const button = wrapper.find('#transferspan');
+    button.trigger('click');
+
+  });
+  //
   it('contains proper number of currencies', () => {
-    const wrapper = mount(CompanyApplyForm({
-      arrayOfCurrencies: ["USD"]
-    }));
-    expect(wrapper.html()).toContain('<span>USD</span>');
+    const wrapper = mount(CompanyApply), testCurrency = "USD", testEmailAddress = "johny@test.tt",
+      testTransactionValue = 123;
+    // Setting up proper array objects
+    wrapper.setData({arrayOfCurrencies: [testCurrency], arrayOfRecipients: [testEmailAddress]})
+    // Filling form data
+    wrapper.setData({
+        form: {
+          recipient: testEmailAddress,
+          fromCurrency: testCurrency,
+          toCurrency: testCurrency,
+          value: testTransactionValue,
+          loading: false
+        }
+      }
+    )
+    wrapper.setData({arrayOfCurrencies: ["USD"], arrayOfRecipients: ['john@aw.da']})
+
+    expect(wrapper.html()).toContain('<span>' + testCurrency + '</span>');
+
+    const button = wrapper.find('#transferspan');
+    button.trigger('click');
+
+
   })
 
 });

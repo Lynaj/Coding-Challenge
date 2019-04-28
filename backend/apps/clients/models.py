@@ -179,7 +179,7 @@ def CreateBasicClientObject(sender,
             queriedNativeSystemCurrency = Currency.objects.filter(
                 defaultSystemCurrency=True
             )
-            if(queriedNativeSystemCurrency.count() == 1):
+            if(queriedNativeSystemCurrency.count() >= 1):
                 Client.objects.create(
                     userObject=instance,
                     nativeAccountCurrency=queriedNativeSystemCurrency[0]

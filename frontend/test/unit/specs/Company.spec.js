@@ -2,10 +2,8 @@ import { mount } from '@vue/test-utils'
 import Vue from 'vue'
 import Company from '../../../src/components/Company/Company/Company'
 import SuiVue from "semantic-ui-vue";
-import Notifications from 'vue-notification'
 
 Vue.use(SuiVue);
-Vue.use(Notifications);
 
 
 describe('Company.vue', () => {

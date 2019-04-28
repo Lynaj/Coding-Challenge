@@ -2,7 +2,7 @@
   
   <div style="display: flex; flex-direction: column; justify-content: center;">
 
-   <notifications group="auth"/>
+
 
 
 
@@ -95,7 +95,6 @@ import { CircleLoader } from '@saeris/vue-spinners'
 import {validationMixin} from 'vuelidate'
 import {required, email, minLength, sameAs} from 'vuelidate/lib/validators'
 import Vuelidate from 'vuelidate'
-import Notifications from 'vue-notification'
 export default {
   name: 'CompanyRegisterComponent',
   mixins: [validationMixin],
@@ -173,7 +172,6 @@ export default {
     VueSwal,
     Vuelidate,
     CircleLoader,
-    Notifications,
     Toasted
   },
   mounted: function () {

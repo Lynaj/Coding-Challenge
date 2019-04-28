@@ -6,9 +6,12 @@ set -o nounset
 set -o xtrace
 
 # Running unittests
-coverage run --source='.' manage.py test transactions
+coverage run --source='.' manage.py test apps
 # Generating report
 coverage html
+
+# Running mutation tests
+python manage.py muttest apps.transaction
 
 python manage.py migrate
 python manage.py collectstatic --noinput --verbosity 0

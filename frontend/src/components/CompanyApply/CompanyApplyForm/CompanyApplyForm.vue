@@ -24,99 +24,102 @@
       </div>
     </transition>
 
-    <transition name="fade" v-on:after-leave="afterLeave">
-      <section v-if="!COMPUTED_displaySuccess && !COMPUTED_displayWarning" class="section">
-        <div class="container">
-          <div class="div-main-container-apply-form">
-            <div>
 
-              <template>
+    <section v-if="!COMPUTED_displaySuccess && !COMPUTED_displayWarning" class="section">
+      <div class="container">
+        <div class="div-main-container-apply-form">
+          <div>
 
-                <div style="text-align: left;display: flex;flex-direction: column;justify-content: center;">
+            <template>
 
-                  <div id="top" class="apply-form-first-step-sub-div" style="float: left;display: block;margin: auto;">
+              <div style="text-align: left;display: flex;flex-direction: column;justify-content: center;">
+
+                <div id="top" class="apply-form-first-step-sub-div" style="float: left;display: block;margin: auto;">
 
 
-                    <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
-                      <label class="label">Recipient</label>
-                      <div class="control">
-                        <multiselect :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.recipient.$error) ? 'ui-input-box-div-is-danger' : '']"
-                                     :searchable="true" :close-on-select="true" :show-labels="false"
-                                     placeholder="Choose recipient email" :multiple="false" v-model="form.recipient"
-                                     :options="arrayOfRecipients"></multiselect>
-                      </div>
-                      <p v-if="$v.form.recipient.$error" class="help is-danger">This field is required.</p>
+                  <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
+                    <label class="label">Recipient</label>
+                    <div class="control">
+                      <multiselect
+                        :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.recipient.$error) ? 'ui-input-box-div-is-danger' : '']"
+                        :searchable="true" :close-on-select="true" :show-labels="false"
+                        placeholder="Choose recipient email" :multiple="false" v-model="form.recipient"
+                        :options="arrayOfRecipients"></multiselect>
                     </div>
-
-
-                    <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
-                      <label class="label">From Currency</label>
-                      <div class="control">
-                        <multiselect :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.fromCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
-                                     :searchable="true" :close-on-select="true" :show-labels="false"
-                                     placeholder="Choose proper currency" :multiple="false" v-model="form.fromCurrency"
-                                     :options="arrayOfCurrencies"></multiselect>
-                      </div>
-                      <p v-if="$v.form.fromCurrency.$error" class="help is-danger">This field is required.</p>
-                    </div>
-
-                    <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
-                      <label class="label">To Currency</label>
-                      <div class="control">
-                        <multiselect :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.toCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
-                                     :searchable="true" :close-on-select="true" :show-labels="false"
-                                     placeholder="Choose proper currency" :multiple="false" v-model="form.toCurrency"
-                                     :options="arrayOfCurrencies"></multiselect>
-                      </div>
-                      <p v-if="$v.form.toCurrency.$error" class="help is-danger">This field is required.</p>
-                    </div>
-
-                    <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
-                      <label class="label">Transaction Value</label>
-                      <div class="control">
-
-                        <input placeholder="5000"
-                               :class="['input ui-input-box-div input-input-box-div-text', ($v.form.value.$error) ? 'ui-input-box-div-is-danger' : '']"
-                               type="text" style="width: 80%;"
-                               v-model="form.value">
-                      </div>
-                      <p v-if="$v.form.value.$error" class="help is-danger">This field is required.<br>Only integer/float values are valid.</p>
-                    </div>
-
+                    <p v-if="$v.form.recipient.$error" class="help is-danger">This field is required.</p>
                   </div>
+
+
+                  <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
+                    <label class="label">From Currency</label>
+                    <div class="control">
+                      <multiselect
+                        :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.fromCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
+                        :searchable="true" :close-on-select="true" :show-labels="false"
+                        placeholder="Choose proper currency" :multiple="false" v-model="form.fromCurrency"
+                        :options="arrayOfCurrencies"></multiselect>
+                    </div>
+                    <p v-if="$v.form.fromCurrency.$error" class="help is-danger">This field is required.</p>
+                  </div>
+
+                  <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
+                    <label class="label">To Currency</label>
+                    <div class="control">
+                      <multiselect
+                        :class="['input ui-input-box-div ui-input-box-div-text', ($v.form.toCurrency.$error) ? 'ui-input-box-div-is-danger' : '']"
+                        :searchable="true" :close-on-select="true" :show-labels="false"
+                        placeholder="Choose proper currency" :multiple="false" v-model="form.toCurrency"
+                        :options="arrayOfCurrencies"></multiselect>
+                    </div>
+                    <p v-if="$v.form.toCurrency.$error" class="help is-danger">This field is required.</p>
+                  </div>
+
+                  <div style="margin: 3em 3em 3em 3em;width: 100%;" class="field">
+                    <label class="label">Transaction Value</label>
+                    <div class="control">
+
+                      <input placeholder="5000"
+                             :class="['input ui-input-box-div input-input-box-div-text', ($v.form.value.$error) ? 'ui-input-box-div-is-danger' : '']"
+                             type="text" style="width: 80%;"
+                             v-model="form.value">
+                    </div>
+                    <p v-if="$v.form.value.$error" class="help is-danger">This field is required.<br>Only integer/float
+                      values are valid.</p>
+                  </div>
+
                 </div>
+              </div>
 
-              </template>
-
-            </div>
+            </template>
 
           </div>
 
-          <!--Post job offer button-->
-          <transition name="fade">
-            <div v-if="!loading">
+        </div>
 
-              <div style="margin-top: 2em !important;" @click="initializeTransfer" data-v-3ee86246=""
-                   class="bottom only-next">
+        <!--Post job offer button-->
+        <transition name="fade">
+          <div v-if="!loading">
 
-                <div data-v-3ee86246="" class="next-main-div-button stepper-button next deactivated">
+            <div style="margin-top: 2em !important;" @click="initializeTransfer" data-v-3ee86246=""
+                 class="bottom only-next">
 
-                  <span data-v-3ee86246="">Transfer</span>
+              <div data-v-3ee86246="" class="next-main-div-button stepper-button next deactivated">
 
-                </div>
+                <span id="transferspan" data-v-3ee86246="">Transfer</span>
 
               </div>
 
             </div>
 
-            <div v-else>
-              <circle-loader class="spinner-class" loading=true color="black" size="135" sizeUnit="px"/>
-            </div>
-          </transition>
+          </div>
 
-        </div>
-      </section>
-    </transition>
+          <div v-else>
+            <circle-loader class="spinner-class" loading=true color="black" size="135" sizeUnit="px"/>
+          </div>
+        </transition>
+
+      </div>
+    </section>
   </div>
 </template>
 
@@ -127,15 +130,13 @@
 
 <script type="text/javascript">
   import {store} from '../../../store/store'
-  import HorizontalStepper from 'vue-stepper'
   import VueSwal from 'vue-swal'
   import {validationMixin} from 'vuelidate'
   import {required, email, minLength, between} from 'vuelidate/lib/validators'
   import Vuelidate from 'vuelidate'
-  import dropdown from 'vue-dropdowns'
-  import Places from 'vue-places'
   import VueRecaptcha from 'vue-recaptcha'
   import Toasted from 'vue-toasted'
+  import Multiselect from 'vue-multiselect'
 
   var VueScrollTo = require('vue-scrollto');
 
@@ -161,8 +162,7 @@
     },
     data() {
       return {
-        arrayOfRecipients: [
-        ],
+        arrayOfRecipients: [],
         arrayOfCurrencies: [],
         windowWidth: window.innerWidth,
         displayWarning: false,
@@ -180,24 +180,27 @@
     components: {
       VueScrollTo,
       Toasted,
-      Places,
       VueSwal,
       Vuelidate,
-      'dropdown': dropdown,
-      VueRecaptcha
+      VueRecaptcha,
+      'multiselect': Multiselect
     },
     methods: {
       METHOD_resetCurrentView() {
         store.commit('MUTATE_currentAction', '')
       },
       METHOD_checkBalance(fromCurrency, transferValue) {
-        var matchedBalance = store.getters['user/GET_BALANCES'].filter(
-          queriedBalance => queriedBalance.currency == fromCurrency
-        );
+        try{
+          var matchedBalance = store.getters['user/GET_BALANCES'].filter(
+            queriedBalance => queriedBalance.currency == fromCurrency
+          );
+        } catch(e) {
+          var matchedBalance = [{ value: 0 }];
+        }
 
-        if(matchedBalance !== undefined) {
+        if (matchedBalance !== undefined) {
           // checking if user has enough funds to process this transfer
-          if(matchedBalance[0].value >= transferValue) {
+          if (matchedBalance[0].value >= transferValue) {
             return true;
           } else {
             return false;
@@ -207,22 +210,21 @@
         }
       },
       initializeTransfer() {
-        var self = this
+        var self = this;
         this.$v.$touch()
         // is logged in
         if (!self.$v.$invalid) {
-          if (
-            localStorage.getItem('jwt') !== null
-            &&
-            localStorage.getItem('loggedIn').toString() == "true"
-          ) {
-
-            if(this.METHOD_checkBalance(self.form.fromCurrency, self.form.value) == true) {
+          {
+            if(self.form.value !== undefined) {
+              var transferValue = self.form.value;
+            } else {
+              var transferValue = 0;
+            }
+            if (this.METHOD_checkBalance(self.form.fromCurrency, self.form.value) == true) {
               var obtainedData = {
                 data: self.form,
                 token: localStorage.getItem('jwt')
               };
-
 
               store.dispatch('user/initializeTransfer', obtainedData).then((response) => {
                 this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
@@ -233,31 +235,13 @@
               }).catch(error => {
                 this.$swal('Oopss! Something went wrong')
               })
-            // } else {
-            //   this.$route.push(store.getters.GET_LINKS_OBJECT.job_offers);
-            // }
+              // } else {
+              //   this.$route.push(store.getters.GET_LINKS_OBJECT.job_offers);
+              // }
             } else {
               this.$swal('You have to raise more capital before processing this transfer.')
             }
 
-
-        } else {
-
-          setTimeout(
-            function () {
-              try {
-                VueScrollTo.scrollTo(
-                  document.getElementsByClassName("ui-input-box-div-is-danger")[0]
-                  ,
-                  500,
-                  {
-                    offset: -50
-                  });
-              } catch (e) {
-                console.log(e);
-              }
-            }, 100
-          );
           }
         }
       }

@@ -31,6 +31,7 @@ THIRD_PARTY_APPS = [
     'silk',
     'rest_framework',
     'corsheaders',
+    'django_mutpy',
     'django_extensions',
     'rest_framework.authtoken',
     'rest_framework_filters'

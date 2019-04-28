@@ -5,7 +5,6 @@ logger = logging.getLogger(__name__)
 logger.addHandler(handler)
 
 from django.test import TestCase
-from decentmark.models import *
 
 
 class CurrenciesModelTest(TestCase):

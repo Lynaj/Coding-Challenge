@@ -64,7 +64,6 @@
 </style>
 
 <script type="text/javascript">
-import Notifications from 'vue-notification'
 import { store } from '../../../store/store'
 import VueSwal from 'vue-swal'
 import { CircleLoader } from '@saeris/vue-spinners'
@@ -169,7 +168,6 @@ export default {
     Vuelidate,
     CircleLoader,
     VueRouter,
-    Notifications,
     VueRecaptcha
   },
   mounted: function () {

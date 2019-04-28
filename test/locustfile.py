@@ -1,25 +1,34 @@
 from locust import HttpLocust, TaskSet
+from random import randrange
+import json
+
+def register(l):
+    l.client.post("/api/v1/users/register/", {"email": l.randomizedField, "password": l.randomizedField, "repeatPassword": l.randomizedField, "firstName": l.randomizedField,
+     "lastName": l.randomizedField})
 
 def login(l):
-    l.client.post("/login", {"username":"ellen_key", "password":"education"})
-
-def logout(l):
-    l.client.post("/logout", {"username":"ellen_key", "password":"education"})
+    auth_response = l.client.post("/api/v1/auth/obtain_token/", {"email": l.randomizedField, "password": l.randomizedField})
+    auth_token = json.loads(auth_response.text)['token']
+    l.token = 'Bearer ' + auth_token
 
 def index(l):
     l.client.get("/")
 
-def profile(l):
-    l.client.get("/profile")
+def balance(l):
+    l.client.get("/api/v1/balances/",
+        headers={'Authorization': l.jwt_auth_token}
+    )
 
 class UserBehavior(TaskSet):
-    tasks = {index: 2, profile: 1}
+    tasks = {index: 2, balance: 1}
+
+    randomizedField = str(
+        randrange(1000000000)
+    ) + "am@wp.pl"
+    token = ''
 
     def on_start(self):
         login(self)
-
-    def on_stop(self):
-        logout(self)
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior
