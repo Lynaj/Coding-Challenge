@@ -85,9 +85,6 @@ class TransactionsModelTest(TestCase):
     test_second_user.save()
 
 
-    logger.error('User.objects.all(): ' + str(User.objects.all()))
-    logger.error('Client.objects.all(): ' + str(Client.objects.all()))
-
     Transaction.objects.create(
         recipient=Client.objects.all()[0],
         sender=Client.objects.all()[1],

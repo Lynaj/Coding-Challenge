@@ -13,6 +13,6 @@ COPY ./requirements.txt /
 RUN pip install -r ./requirements.txt
 
 # upload scripts
-COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh ./scripts/test_script.sh /
+COPY ./scripts/entrypoint.sh ./scripts/start.sh ./scripts/gunicorn.sh ./scripts/testScript.sh /
 
 WORKDIR /app

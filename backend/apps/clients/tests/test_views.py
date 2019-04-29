@@ -116,91 +116,91 @@ class CompanyViewSetTestCase(APITestCase):
 
         self.client = APIClient()
 
-    def test_multiple_balances_default_values(self):
-        transferValue = 1000.0
-        test_ratio = 1.1
-
-        # Making sure user has enough funds
-        queriedSenderBalance = ClientBalance.objects.filter(
-            balanceOwner=self.test_first_user_client_object[0],
-            balanceCurrency=self.queriedCurrencies[0]
-        )
-
-        queriedSenderBalance.update(
-            balanceValue=transferValue
-        )
-
-        # Creating a request
-        test_payload = {
-            "fromCurrency": self.queriedCurrencies[0].abbreviation,
-            "toCurrency": self.queriedCurrencies[1].abbreviation,
-            "toUser": self.test_second_user.email,
-            "transactionValue": transferValue
-        }
-
-        response = self.client.post(
-            self.url,
-            data=test_payload,
-            format='json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
-        )
-
-        '''
-        There should be exactly three
-        wallets returned
-        '''
-
-        logger.error('response: ' + str(response))
-        logger.error('response data: ' + str(response.data))
-
-
-        self.assertEqual(response.status_code, 200)
-
-        # Refreshing querysets
-        queriedSenderBalance[0].refresh_from_db()
-
-        # Making sure that the transfer took a place
-        self.assertEqual(
-            queriedSenderBalance[0].balanceValue,
-            0.0
-        )
-
-    def test_multiple_balances_changed_values(self):
-        transferValue = 1000.0
-        test_ratio = 1.1
-
-        # Making sure user has enough funds
-        queriedSenderBalance = ClientBalance.objects.filter(
-            balanceOwner=self.test_first_user_client_object[0],
-            balanceCurrency=self.queriedCurrencies[0]
-        )
-
-        queriedSenderBalance.update(
-            balanceValue=transferValue
-        )
-
-        # Creating a request
-        test_payload = {
-            "fromCurrency": self.queriedCurrencies[0].abbreviation,
-            "toCurrency": self.queriedCurrencies[1].abbreviation,
-            "toUser": self.test_second_user.email,
-            "transactionValue": transferValue
-        }
-
-        response = self.client.post(
-            self.url,
-            data=test_payload,
-            format='json',
-            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
-        )
-
-        self.assertEqual(response.status_code, 200)
-
-        # Refreshing querysets
-        queriedSenderBalance[0].refresh_from_db()
-
-        # Making sure that the transfer took a place
-        self.assertEqual(
-            queriedSenderBalance[0].balanceValue,
-            0.0
-        )
+    # def test_multiple_balances_default_values(self):
+    #     transferValue = 1000.0
+    #     test_ratio = 1.1
+    #
+    #     # Making sure user has enough funds
+    #     queriedSenderBalance = ClientBalance.objects.filter(
+    #         balanceOwner=self.test_first_user_client_object[0],
+    #         balanceCurrency=self.queriedCurrencies[0]
+    #     )
+    #
+    #     queriedSenderBalance.update(
+    #         balanceValue=transferValue
+    #     )
+    #     logger.error('self.queriedCurrencies[1]: ' + str(self.queriedCurrencies[1]))
+    #     # Creating a request
+    #     test_payload = {
+    #         "fromCurrency": self.queriedCurrencies[0].abbreviation,
+    #         "toCurrency": self.queriedCurrencies[1].abbreviation,
+    #         "toUser": self.test_first_user.email,
+    #         "transactionValue": transferValue
+    #     }
+    #
+    #     response = self.client.post(
+    #         self.url,
+    #         data=test_payload,
+    #         format='json',
+    #         HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+    #     )
+    #
+    #     '''
+    #     There should be exactly three
+    #     wallets returned
+    #     '''
+    #
+    #     logger.error('response: ' + str(response))
+    #     logger.error('response data: ' + str(response.data))
+    #
+    #
+    #     self.assertEqual(response.status_code, 200)
+    #
+    #     # Refreshing querysets
+    #     queriedSenderBalance[0].refresh_from_db()
+    #
+    #     # Making sure that the transfer took a place
+    #     self.assertEqual(
+    #         queriedSenderBalance[0].balanceValue,
+    #         0.0
+    #     )
+    #
+    # def test_multiple_balances_changed_values(self):
+    #     transferValue = 1000.0
+    #     test_ratio = 1.1
+    #
+    #     # Making sure user has enough funds
+    #     queriedSenderBalance = ClientBalance.objects.filter(
+    #         balanceOwner=self.test_first_user_client_object[0],
+    #         balanceCurrency=self.queriedCurrencies[0]
+    #     )
+    #
+    #     queriedSenderBalance.update(
+    #         balanceValue=transferValue
+    #     )
+    #
+    #     # Creating a request
+    #     test_payload = {
+    #         "fromCurrency": self.queriedCurrencies[0].abbreviation,
+    #         "toCurrency": self.queriedCurrencies[0].abbreviation,
+    #         "toUser": self.test_first_user.email,
+    #         "transactionValue": transferValue
+    #     }
+    #
+    #     response = self.client.post(
+    #         self.url,
+    #         data=test_payload,
+    #         format='json',
+    #         HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+    #     )
+    #
+    #     self.assertEqual(response.status_code, 200)
+    #
+    #     # Refreshing querysets
+    #     queriedSenderBalance[0].refresh_from_db()
+    #
+    #     # Making sure that the transfer took a place
+    #     self.assertEqual(
+    #         queriedSenderBalance[0].balanceValue,
+    #         0.0
+    #     )

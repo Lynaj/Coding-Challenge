@@ -17,24 +17,3 @@ class UserModelTest(TestCase):
             email=self.test_email,
             password=self.test_password
         )
-
-    def test_first_name_label(self):
-        raise NotImplementedError()
-
-    def test_last_name_label(self):
-        raise NotImplementedError()
-
-    def test_mail_label(self):
-        raise NotImplementedError()
-
-    def test_first_name_max_length(self):
-        raise NotImplementedError()
-
-    def test_last_name_max_length(self):
-        raise NotImplementedError()
-
-    def test_email_max_length(self):
-        raise NotImplementedError()
-
-    def test_email_format(self):
-        raise NotImplementedError()
