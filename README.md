@@ -18,10 +18,13 @@
 ## Setup
 The entire project is containerized, so that in order to run it, 
 one has to own Docker (https://www.docker.com/) software installed
-To run this project, use following commands:
+To run this project, use following commands ( in coming days there will be the Makefile / Bash script created to simplify the process of installation )
 
 ```
 $ docker-compose build
+$ docker-compose run frontend sh
+$ npm install
+$ exit
 $ docker-compose up 
 ```
 
