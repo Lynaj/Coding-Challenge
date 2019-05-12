@@ -1,28 +1,15 @@
-from locust import HttpLocust, TaskSet
+from locust import HttpLocust, TaskSet, task
 
-def login(l):
-    l.client.post("/login", {"username":"ellen_key", "password":"education"})
+class MyTaskSet(TaskSet):
+    @task(2)
+    def index(self):
+        self.client.get("/")
 
-def logout(l):
-    l.client.post("/logout", {"username":"ellen_key", "password":"education"})
+    @task(1)
+    def about(self):
+        self.client.get("/about/")
 
-def index(l):
-    l.client.get("/")
-
-def profile(l):
-    l.client.get("/profile")
-
-class UserBehavior(TaskSet):
-    tasks = {index: 2, profile: 1}
-
-    def on_start(self):
-        login(self)
-
-    def on_stop(self):
-        logout(self)
-
-class WebsiteUser(HttpLocust):
-    task_set = UserBehavior
+class MyLocust(HttpLocust):
+    task_set = MyTaskSet
     min_wait = 5000
-    max_wait = 9000
-
+    max_wait = 15000
