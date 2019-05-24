@@ -60,8 +60,24 @@ logger.addHandler(handler)
 
 
 class TransactionsViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     parser_classes = (JSONParser,)
+
+    '''
+        * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+        * @description 
+            Re-writing permissions due to the fact, that we want our user to
+            be able to read transactions even if he or she is not logged in
+            so that, in such a situation, he or she will see all of the system's transactions
+        * @param -
+        * @return [list] (transactions)
+    '''
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            self.permission_classes = [permissions.AllowAny, ]
+        else:
+            self.permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+
+        return super(TransactionsViewSet, self).get_permissions()
 
     '''
         * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>

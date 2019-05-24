@@ -1,6 +1,6 @@
 <template>
   <transition name="slide">
-    <div :style="COMPUTED_styleMainDiv">
+    <div style="display: flex; justify-content: center;">
 
       <transition name="fade">
 
