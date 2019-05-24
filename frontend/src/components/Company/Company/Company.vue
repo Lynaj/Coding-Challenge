@@ -8,8 +8,8 @@
         </sui-segment>
 
 
-        <sui-segment style="width: 100%;display: block;margin: auto;">
-          <company-table-with-transactions id="top" />
+        <sui-segment style="width: 100%;display: flex;justify-content: center;">
+          <company-table-with-transactions id="top" style="display: flex;justify-content: center;"/>
         </sui-segment>
 
 
@@ -23,12 +23,12 @@
 
 <script type="text/javascript">
 
-import { store } from '../../../store/store'
-import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
-import CompanyTableWithTransactions from '../../CompanyMainPanelComponent/CompanyTableWithTransactions/CompanyTableWithTransactions'
-import VueRouter from 'vue-router'
+  import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
+  import CompanyTableWithTransactions
+    from '../../CompanyMainPanelComponent/CompanyTableWithTransactions/CompanyTableWithTransactions'
+  import VueRouter from 'vue-router'
 
-export default {
+  export default {
   name: 'Company',
   data () {
     return {

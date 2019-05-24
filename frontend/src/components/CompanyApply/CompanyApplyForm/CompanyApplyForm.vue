@@ -103,11 +103,9 @@
             <div style="margin-top: 2em !important;" @click="initializeTransfer" data-v-3ee86246=""
                  class="bottom only-next">
 
-              <div data-v-3ee86246="" class="next-main-div-button stepper-button next deactivated">
-
-                <span id="transferspan" data-v-3ee86246="">Transfer</span>
-
-              </div>
+              <button class="next-main-div-button stepper-button next deactivated" id="transferspan" data-v-3ee86246="">
+                Transfer
+              </button>
 
             </div>
 
@@ -131,9 +129,8 @@
 <script type="text/javascript">
   import {store} from '../../../store/store'
   import VueSwal from 'vue-swal'
-  import {validationMixin} from 'vuelidate'
-  import {required, email, minLength, between} from 'vuelidate/lib/validators'
-  import Vuelidate from 'vuelidate'
+  import Vuelidate, {validationMixin} from 'vuelidate'
+  import {between, required} from 'vuelidate/lib/validators'
   import VueRecaptcha from 'vue-recaptcha'
   import Toasted from 'vue-toasted'
   import Multiselect from 'vue-multiselect'
@@ -198,7 +195,8 @@
           var matchedBalance = [{ value: 0 }];
         }
 
-        if (matchedBalance !== undefined) {
+        console.log('matchedBalance : ' + matchedBalance.toString());
+        if (matchedBalance !== undefined && matchedBalance != '' && matchedBalance.length > 0) {
           // checking if user has enough funds to process this transfer
           if (matchedBalance[0].value >= transferValue) {
             return true;
@@ -211,7 +209,7 @@
       },
       initializeTransfer() {
         var self = this;
-        this.$v.$touch()
+        this.$v.$touch();
         // is logged in
         if (!self.$v.$invalid) {
           {
@@ -229,7 +227,7 @@
               store.dispatch('user/initializeTransfer', obtainedData).then((response) => {
                 this.$swal('Congratulation! Your transfer has been succesfully created!').then(() => {
                   this.$router.push('/');
-                })
+                });
                 self.loading = false;
                 self.METHOD_resetCurrentView()
               }).catch(error => {
@@ -272,7 +270,7 @@
 
       window.addEventListener('resize', () => {
         this.windowWidth = window.innerWidth
-      })
+      });
       if (!this.$v.$invalid) {
         this.$emit('can-continue', {value: true})
       } else {

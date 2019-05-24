@@ -16,25 +16,23 @@
 
         </sui-segment>
 
+        <!-- component containig table with processed transactions -->
+        <template v-if="COMPUTED_router_path == self_store.getters.GET_LINKS_OBJECT.transactions">
+
+          <sui-segment style="width: 100%;display: block;margin: auto;">
+            <company-table-with-transactions id="top"/>
+          </sui-segment>
+
+        </template>
+
         <!-- component containig form that allows user to create a new job offer -->
 
-        <template v-if="COMPUTED_router_path == self_store.getters.GET_LINKS_OBJECT.transferCreate" >
-          
+        <template v-else>
+
           <sui-segment style="width: 100%;">
             <company-apply-form :formObject="local_test_item" :screeningQuestions="screeningQuestions"/>
           </sui-segment>
-
         </template>
-
-         <!-- component containig table with processed transactions -->
-        <template v-else-if="COMPUTED_router_path == self_store.getters.GET_LINKS_OBJECT.transactions" >
-          
-          <sui-segment style="width: 100%;display: block;margin: auto;">
-            <company-table-with-transactions id="top" />
-          </sui-segment>
-
-        </template>
-
 
         <template v-if="windowWidth >= 1200">
            <sui-segment class="company-main-info-box-segment" >
@@ -45,6 +43,7 @@
           </sui-segment>
 
         </template>
+
 
 
     </div>
@@ -58,14 +57,15 @@
 
 <script type="text/javascript">
 
-import { store } from '../../../store/store'
-import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
-import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
-import CompanyMainMenuBoxComponent from '../CompanyMainMenuBoxComponent/CompanyMainMenuBoxComponent.vue'
-import CompanyTableWithTransactions from '../CompanyTableWithTransactions/CompanyTableWithTransactions.vue'
-import CompanyMainBalanceTable from '../CompanyMainBalanceTable/CompanyMainBalanceTable.vue'
-import VueRouter from 'vue-router'
-var VueScrollTo = require('vue-scrollto');
+  import {store} from '../../../store/store'
+  import CompanyInfoBox from '../../CompanyInfo/CompanyInfoBox/CompanyInfoBox.vue'
+  import CompanyApplyForm from '../../CompanyApply/CompanyApplyForm/CompanyApplyForm.vue'
+  import CompanyMainMenuBoxComponent from '../CompanyMainMenuBoxComponent/CompanyMainMenuBoxComponent.vue'
+  import CompanyTableWithTransactions from '../CompanyTableWithTransactions/CompanyTableWithTransactions.vue'
+  import CompanyMainBalanceTable from '../CompanyMainBalanceTable/CompanyMainBalanceTable.vue'
+  import VueRouter from 'vue-router'
+
+  var VueScrollTo = require('vue-scrollto');
 
 export default {
   name: 'CompanyMainPanelComponent',
@@ -102,19 +102,16 @@ export default {
       return true
     },
     METHOD_change_path: function (nameOfThePath) {
-      console.log('zmieniam na: ' + nameOfThePath);
       if (nameOfThePath == '/login') {
         store.commit('MUTATE_currentAction', 'login')
       }
-      this.$router.push(nameOfThePath)
+      this.$router.push(nameOfThePath);
       VueScrollTo.scrollTo('#top', 500)
     },
     METHOD_change_path_menu: function (menuItemId) {
-      console.log('zmieniam na id: ' + menuItemId.id)
-      var self = this
+      var self = this;
       this.COMPUTED_localMenuItemsMobile.forEach(function (menuItem) {
         if (menuItem.id == menuItemId.id) {
-          console.log('zmieniam na path: ' + menuItem.path)
           self.METHOD_change_path(menuItem.path)
         }
       })

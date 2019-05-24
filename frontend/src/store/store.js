@@ -4,8 +4,9 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import VueCarousel from 'vue-carousel'
 import user from './modules/user'
-Vue.use(Vuex)
-Vue.use(VueCarousel)
+
+Vue.use(Vuex);
+Vue.use(VueCarousel);
 
 export const store = new Vuex.Store({
   modules: {
@@ -93,28 +94,28 @@ export const store = new Vuex.Store({
     },
     handleToken({commit, dispatch}, response) {
 
-      localStorage.setItem('jwt', response.data.token)
-      console.log('handleToken: 1');
-      commit('login')
-      console.log('handleToken: 2');
+      localStorage.setItem('jwt', response.data.token);
+      commit('login');
       commit('setAuthError', false)
 
 
     },
     logoutUser({commit, dispatch}, payload) {
       return new Promise((resolve, reject) => {
-        axios.get('/logout'
-        ).then(response => {
-        })
-          .catch(error => {
-          })
-          .finally(() => {
-              commit('logout');
-              commit('MUTATE_currentAction', 'createATransfer');
-              payload.router.push('/');
-              resolve()
-            }
-          );
+        // axios.get('/logout'
+        // ).then(response => {
+        //   commit('logout');
+        //   commit('MUTATE_currentAction', 'createATransfer');
+        //   payload.router.push('/');
+        //   resolve();
+        // })
+        // .catch(error => {
+        //   reject();
+        // })
+        commit('logout');
+        commit('MUTATE_currentAction', 'createATransfer');
+        payload.router.push('/');
+        resolve();
       })
     },
     loginUser({commit, dispatch}, payload) {
@@ -134,7 +135,7 @@ export const store = new Vuex.Store({
           resolve()
         })
           .catch(error => {
-            commit('setAuthError', true)
+            commit('setAuthError', true);
             reject({data: "Something went wrong"});
           })
       })
@@ -143,7 +144,7 @@ export const store = new Vuex.Store({
 
       let formattedPayload = {
         'token': payload
-      }
+      };
 
       console.log('wysylam formattedPayload: ' + formattedPayload);
 
@@ -152,8 +153,7 @@ export const store = new Vuex.Store({
           dispatch('handleToken', response);
         })
         .catch(e => {
-          commit('setAuthError', true)
-          console.log(e)
+          commit('setAuthError', true);
         })
     },
     postRegister({commit}, payload) {
@@ -168,8 +168,8 @@ export const store = new Vuex.Store({
 
             if (response.status === 201) {
 
-              commit('login')
-              commit('setProfile', response.data)
+              commit('login');
+              commit('setProfile', response.data);
 
               resolve();
 
@@ -177,7 +177,7 @@ export const store = new Vuex.Store({
               reject("Email already in use!");
 
             } else if (response.status === 400) {
-              commit('setRegistrationError', true)
+              commit('setRegistrationError', true);
               reject("Something went wrong");
 
             }
@@ -192,4 +192,4 @@ export const store = new Vuex.Store({
     },
 
   }
-})
+});

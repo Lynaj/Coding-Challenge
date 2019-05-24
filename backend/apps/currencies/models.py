@@ -1,12 +1,7 @@
-from uuid import uuid4
-
 from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.db import models
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
-import uuid
 
 from apps.misc.logger import *
 from apps.currencies.choices import *
@@ -27,7 +22,6 @@ class Currency(models.Model):
     )
 
     abbreviation = models.CharField(
-        # choices=CURRENCY_TYPE,
         default="",
         max_length=30,
         null=False,
@@ -39,6 +33,12 @@ class Currency(models.Model):
         verbose_name='Is a default currency of the entire system'
     )
 
+    class Meta:
+        verbose_name = 'Currency'
+        verbose_name_plural = 'Currencies'
+
+    def __str__(self):
+        return '%s' % (self.name)
 
 class CurrencyRatio(models.Model):
     fromCurrency = models.ForeignKey(

@@ -6,7 +6,7 @@
       <circle-loader class="spinner-class" loading=true color="black" size="135" sizeUnit="px"/>
     </div>
 
-    <div v-else>
+    <div v-else style="display: flex;justify-content: center;">
       <table class="ui celled padded table ui label"
              style="width: auto; border: 1px solid;box-shadow: 2px azure !important; background-color: #f0f0f0;color: gray;">
 
