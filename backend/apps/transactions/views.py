@@ -13,7 +13,6 @@ from base64 import b64decode
 from decimal import *
 getcontext().prec = 2
 
-
 from django.db import models
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -25,7 +24,6 @@ from django.core.files.base import ContentFile
 from django.utils.decorators import method_decorator
 from django.core.files.storage import FileSystemStorage
 from django.views.decorators.csrf import csrf_exempt
-# import rest_framework_filters as filters
 
 from apps.users.models import User
 from apps.users.serializers import *
