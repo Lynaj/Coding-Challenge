@@ -1,13 +1,9 @@
-from locust import HttpLocust, TaskSet
+from locust import HttpLocust, TaskSet, task
 from random import randrange
 import json
-from django.db.models import Q
-
-
-
 
 class UserBehavior(TaskSet):
-    tasks = {index: 2, balance: 1}
+    # tasks = {index: 2, balance: 1}
 
     randomizedField = str(
         randrange(1000000000)
@@ -91,7 +87,7 @@ class UserBehavior(TaskSet):
     #     '''
     #     if(Transaction.objects.all().count() != self.number_of_transaction):
     #         raise Exception('WRONG NUMBER OF TRANSACTIONS')
-          
+
 
     # def on_stop(self):
     #     # Cleaning up created transactions & test user

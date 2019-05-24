@@ -44,17 +44,14 @@ Reports:
 
   >Silk: http://localhost:8000/silk
   
-  >Locust:
-  http://127.0.0.1:8089
+  >Locust: http://127.0.0.1:8089
   
   >Jest: frontend/test/unit/coverage/src/index.html
   
   >Nightwatch: frontend/test/e2e/reports
   
   >Unittest ( Backend ): backend/htmlcov/index.html
-  
-  >Muttest ( Backend ): 
-  
+
 ## Single Component Testing ( front-end )
 
 ```

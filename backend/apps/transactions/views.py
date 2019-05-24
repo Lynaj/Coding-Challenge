@@ -369,11 +369,6 @@ class TransactionsViewSet(viewsets.ModelViewSet):
 
 
             userEmailAddress = request.GET.get('EMAIL', '')
-
-            logger.error("summedtransactions: EMAIL: " +str(userEmailAddress))
-            logger.error("summedtransactions: users:: " +str(User.objects.all()))
-            logger.error("summedtransactions: clients:: " +str(Client.objects.all()))
-
             startingDate = datetime.datetime.strptime(
                 request.GET.get(
                     'START_DATE',
@@ -401,8 +396,9 @@ class TransactionsViewSet(viewsets.ModelViewSet):
 
             # Querying transactions
             queriedTransactions = Transaction.objects.filter(
-                created_at__range=[startingDate,endingDate]).filter(
                 Q(recipient=queriedUser)|Q(sender=queriedUser)
+            ).filter(
+                created_at__range=[startingDate,endingDate]
             )
 
             '''
