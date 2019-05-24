@@ -116,7 +116,7 @@ class CompanyViewSetTestCase(APITestCase):
 
         self.client = APIClient()
 
-    # def test_multiple_balances_default_values(self):
+    # def TTtest_multiple_balances_default_values(self):
     #     transferValue = 1000.0
     #     test_ratio = 1.1
     #
@@ -165,7 +165,7 @@ class CompanyViewSetTestCase(APITestCase):
     #         0.0
     #     )
     #
-    # def test_multiple_balances_changed_values(self):
+    # def TTtest_multiple_balances_changed_values(self):
     #     transferValue = 1000.0
     #     test_ratio = 1.1
     #

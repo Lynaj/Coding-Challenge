@@ -195,7 +195,59 @@ def CreateBasicClientObject(sender,
                 'Problem: exception occured during the process of creating ClientBalance'
                 + 'error: ' + str(e)
             )
-post_save.connect(LinkBasicCurrencyStack, sender=Client)
 
+'''
+    * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+    * @description 
+        Handles the deletion of linked Client object, linked to the User object, that is being deleted
+    * @param -
+    * @return -
+'''
+def SafeDeletionOfTheClientObject(sender, instance, **kwargs):
+
+    try:
+
+        queriedClient = Client.objects.filter(
+            userObject=instance
+        )
+
+        if(queriedClient.count() > 0):
+            queriedClient.delete()
+
+    except Exception as e:
+        logger.error(
+			'Problem: error happened when in safe_deletion_of_the_image'
+			+ '\nerror: ' + str(e)
+		)
+
+
+'''
+    * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+    * @description 
+        Handles the deletion of linked ClientBalance object, linked to the Client object, that is being deleted
+    * @param -
+    * @return -
+'''
+def SafeDeletionOfTheClientBalanceObject(sender, instance, **kwargs):
+
+    try:
+
+        queriedBalance = ClientBalance.objects.filter(
+            balanceOwner=instance
+        )
+
+        if(queriedBalance.count() > 0):
+            queriedBalance.delete()
+
+    except Exception as e:
+        logger.error(
+			'Problem: error happened when in safe_deletion_of_the_image'
+			+ '\nerror: ' + str(e)
+		)
+
+post_save.connect(LinkBasicCurrencyStack, sender=Client)
 pre_save.connect(CreateBasicCurrencyStack, sender=User)
 post_save.connect(CreateBasicClientObject, sender=User)
+
+pre_delete.connect(SafeDeletionOfTheClientObject, sender=User)
+pre_delete.connect(SafeDeletionOfTheClientBalanceObject, sender=Client)

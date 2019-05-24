@@ -1,5 +1,6 @@
 import requests
 import re
+import datetime
 import os
 import json
 import random
@@ -325,6 +326,94 @@ class TransactionsViewSet(viewsets.ModelViewSet):
         except Exception as e:
             logger.error(
                 "Something unexpected happened when in: TransactionsViewSet-transfer:"
+                + '\n'
+                + str(e)
+            )
+
+        return Response(
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    '''
+          * @author name Arthur Drozdzyk <arturdrozdzyk@gmail.com>
+          * @description
+
+               Function responsible for summing up each and every transaction
+               that has been created on behalf of given user's nickname
+          * @param 
+            * [email] (EMAIL) - email of the user. Basing on this field, the transactions will be filtered
+            * [datetimefield] (START_DATE) - starting date of the transactions to filter
+            * [datetimefield] (END_DATE) - ending date of the transactions to filter
+          * @return 
+            * [float] (transactions_value) - value of summed transactions
+      '''
+
+    @list_route(methods=['GET'])
+    def summedtransactions(self, request):
+
+        try:
+
+
+            userEmailAddress = request.GET.get('EMAIL', '')
+
+            logger.error("summedtransactions: EMAIL: " +str(userEmailAddress))
+            logger.error("summedtransactions: users:: " +str(User.objects.all()))
+            logger.error("summedtransactions: clients:: " +str(Client.objects.all()))
+
+            startingDate = datetime.datetime.strptime(
+                request.GET.get(
+                    'START_DATE',
+                    '1990-01-01'
+                )[:10],
+                "%Y-%m-%d"
+            )
+            endingDate = datetime.datetime.strptime(
+                request.GET.get(
+                    'END_DATE',
+                    '2999-01-01'
+                )[:10],
+                "%Y-%m-%d"
+            )
+
+
+            # Querying user
+            queriedUser = get_object_or_404(
+                Client.objects.all(),
+                userObject=get_object_or_404(
+                    User.objects.all(),
+                    email=userEmailAddress
+                )
+            )
+
+            # Querying transactions
+            queriedTransactions = Transaction.objects.filter(
+                created_at__range=[startingDate,endingDate]).filter(
+                Q(recipient=queriedUser)|Q(sender=queriedUser)
+            )
+
+            '''
+                Building up the basic JSON object
+                that will be returned
+            '''
+            jsonDataObject = {
+                'total_value': 0.0,
+                'number_of_transactions': 0
+            }
+
+            if(queriedTransactions.count() > 0):
+                # Filling given jsonDataObject with proper data
+                for transaction in queriedTransactions:
+                    jsonDataObject['total_value'] = jsonDataObject['total_value'] + float(transaction.value)
+                    jsonDataObject['number_of_transactions'] = jsonDataObject['number_of_transactions'] + 1
+
+            return Response(
+                status=status.HTTP_200_OK,
+                data=jsonDataObject
+            )
+
+        except Exception as e:
+            logger.error(
+                "Something unexpected happened when in: TransactionsViewSet-summedtransactions:"
                 + '\n'
                 + str(e)
             )

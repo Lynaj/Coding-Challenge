@@ -8,6 +8,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from decimal import *
 
+import datetime
 import json
 import os
 import codecs
@@ -204,7 +205,7 @@ class CompanyViewSetTestCase(APITestCase):
 
 
 
-    def test_fully_working_transfer__different_currencies_same_user(self):
+    def TTtest_fully_working_transfer__different_currencies_same_user(self):
         transferValue = 1000.0
         test_ratio = 1.1
         statusOfTheTransaction = "[('Processed', 'Processed')]"
@@ -281,7 +282,7 @@ class CompanyViewSetTestCase(APITestCase):
         self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue,
                                 statusOfTheTransaction, True)
 
-    def test_fully_working_transfer__same_currencies_same_user(self):
+    def TTtest_fully_working_transfer__same_currencies_same_user(self):
         transferValue = 1000.0
         test_ratio = 1.1
         statusOfTheTransaction = "[('Processed', 'Processed')]"
@@ -358,7 +359,7 @@ class CompanyViewSetTestCase(APITestCase):
         self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, 1.0, transferValue,
                                 statusOfTheTransaction, True)
 
-    def test_lack_of_funds_error__same_currencies_same_user(self):
+    def TTtest_lack_of_funds_error__same_currencies_same_user(self):
         transferValue = 1000.0
         test_ratio = 1.1
         statusOfTheTransaction = "[('Failed', 'Failed')]"
@@ -435,7 +436,7 @@ class CompanyViewSetTestCase(APITestCase):
         self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, 1.0, transferValue,
                                 statusOfTheTransaction)
 
-    def test_lack_of_funds_error__different_currencies_same_user(self):
+    def TTtest_lack_of_funds_error__different_currencies_same_user(self):
 
         transferValue = 1000.0
         test_ratio = 1.1
@@ -513,7 +514,7 @@ class CompanyViewSetTestCase(APITestCase):
         self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction,
                                 True)
 
-    def test_lack_of_funds_error__different_currencies_different_users(self):
+    def TTtest_lack_of_funds_error__different_currencies_different_users(self):
         transferValue = 1000.0
         test_ratio = 1.1
         statusOfTheTransaction = "[('Failed', 'Failed')]"
@@ -589,7 +590,7 @@ class CompanyViewSetTestCase(APITestCase):
         # Validating the creation of Transaction object
         self.__checkTransaction(queriedSenderBalance, queriedRecipientBalance, test_ratio, transferValue, statusOfTheTransaction)
 
-    def test_negative_transfer_value_positive_balance_of_sender__different_currencies_different_users(self):
+    def TTtest_negative_transfer_value_positive_balance_of_sender__different_currencies_different_users(self):
         transferValue = -1000.0
         balanceOfSender = 1000.0
         test_ratio = 1.1
@@ -663,7 +664,7 @@ class CompanyViewSetTestCase(APITestCase):
             0.0
         )
 
-    def test_large_float_points_attack__different_currencies_different_users(self):
+    def TTtest_large_float_points_attack__different_currencies_different_users(self):
         transferValue = 0.000001
         balanceOfSender = 1000.0
         test_ratio = 1.1
@@ -736,3 +737,428 @@ class CompanyViewSetTestCase(APITestCase):
             queriedRecipientBalance[0].balanceValue,
             0.0
         )
+
+
+
+
+
+
+
+    def TTtest_email_not_provided(self):
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+
+        # summedtransactions FUNCTION
+        test_START_DATE = datetime.datetime.strptime(
+            "22 Aug 2017"
+            ,
+            "%d %b %Y"
+        )
+
+        test_END_DATE = datetime.datetime.strptime(
+            "22 Aug 2020"
+            ,
+            "%d %b %Y"
+        )
+
+        # Building up the data for extra computations
+        url_summedtransactions += '?START_DATE=' + str(test_START_DATE)+ '&END_DATE=' + str(test_END_DATE)
+
+        # Deleting user linked with the e-mail
+        self.test_first_user.delete()
+
+        # Calling function responsible for extra computations
+        response = self.client.get(
+            url_summedtransactions
+        )
+
+        # Validating the response
+        self.assertEqual(
+            response.status_code,
+            404
+        )
+    def TTtest_starting_date_not_provided(self):
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+
+        # summedtransactions FUNCTION
+        test_START_DATE = datetime.datetime.strptime(
+            "22 Aug 2017"
+            ,
+            "%d %b %Y"
+        )
+
+        test_END_DATE = datetime.datetime.strptime(
+            "22 Aug 2020"
+            ,
+            "%d %b %Y"
+        )
+
+        # Building up the data for extra computations
+        url_summedtransactions += '?EMAIL=' + self.test_first_user.email + '&END_DATE=' + str(test_END_DATE)
+
+        # Deleting user linked with the e-mail
+        self.test_first_user.delete()
+
+        # Calling function responsible for extra computations
+        response = self.client.get(
+            url_summedtransactions
+        )
+
+        # Validating the response
+        self.assertEqual(
+            response.status_code,
+            404
+        )
+    def TTtest_ending_date_not_provided(self):
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+
+        # summedtransactions FUNCTION
+        test_START_DATE = datetime.datetime.strptime(
+            "22 Aug 2017"
+            ,
+            "%d %b %Y"
+        )
+
+        test_END_DATE = datetime.datetime.strptime(
+            "22 Aug 2020"
+            ,
+            "%d %b %Y"
+        )
+
+        # Building up the data for extra computations
+        url_summedtransactions += '?EMAIL=' + self.test_first_user.email + '&START_DATE=' + str(test_START_DATE)
+
+        # Deleting user linked with the e-mail
+        self.test_first_user.delete()
+
+        # Calling function responsible for extra computations
+        response = self.client.get(
+            url_summedtransactions
+        )
+
+        # Validating the response
+        self.assertEqual(
+            response.status_code,
+            404
+        )
+    def TTtest_user_connected_with_given_email_does_not_exist(self):
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+
+        # summedtransactions FUNCTION
+        test_START_DATE = datetime.datetime.strptime(
+            "22 Aug 2017"
+            ,
+            "%d %b %Y"
+        )
+
+        test_END_DATE = datetime.datetime.strptime(
+            "22 Aug 2020"
+            ,
+            "%d %b %Y"
+        )
+
+        # Building up the data for extra computations
+        url_summedtransactions += '?EMAIL=' + self.test_first_user.email + '&START_DATE=' + str(test_START_DATE)+ '&END_DATE=' + str(test_END_DATE)
+
+        # Deleting user linked with the e-mail
+        self.test_first_user.delete()
+
+        # Calling function responsible for extra computations
+        response = self.client.get(
+            url_summedtransactions
+        )
+
+        # Validating the response
+        self.assertEqual(
+            response.status_code,
+            404
+        )
+    def TTtest_transactions_connected_with_given_user_does_not_exist(self):
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+        # summedtransactions FUNCTION
+        transferValue = 10.0
+        test_ratio = 1.1
+        statusOfTheTransaction = "[('Processed', 'Processed')]"
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+
+        test_START_DATE = datetime.datetime.strptime(
+            "22 Aug 2017"
+            ,
+            "%d %b %Y"
+        )
+
+        test_END_DATE = datetime.datetime.strptime(
+            "22 Aug 2020"
+            ,
+            "%d %b %Y"
+        )
+
+        # Building up the data for extra computations
+        url_summedtransactions += '?EMAIL=' + self.test_first_user.email + '&START_DATE=' + str(test_START_DATE)+ '&END_DATE=' + str(test_END_DATE)
+
+        # Calling function responsible for extra computations
+        response = self.client.get(
+            url_summedtransactions
+        )
+
+        # Validating the response
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        decodedResponse = response.content.decode('utf-8')
+
+        self.assertEqual(
+            decodedResponse,
+            {
+                'total_value': 0.0,
+                'number_of_transactions': 0
+            }
+        )
+
+    def test_three_transactions_connected_with_given_user(self):
+        # summedtransactions FUNCTION
+        transferValue = 10.0
+        test_ratio = 1.1
+        statusOfTheTransaction = "[('Processed', 'Processed')]"
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue=transferValue
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            transferValue
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[0],
+            ratio=test_ratio
+        )
+
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[0].abbreviation,
+            "recipient": self.test_first_user.email,
+            "value": transferValue
+        }
+
+        # Creating a request
+        for x in range(3):
+            response = self.client.post(
+                self.url,
+                data=test_payload,
+                format='json',
+                HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+            )
+
+            self.assertEqual(response.status_code, 200)
+
+
+        test_START_DATE = datetime.datetime.strptime(
+            "22 Aug 2017"
+            ,
+            "%d %b %Y"
+        )
+
+        test_END_DATE = datetime.datetime.strptime(
+            "22 Aug 2020"
+            ,
+            "%d %b %Y"
+        )
+
+        # Building up the data for extra computations
+        url_summedtransactions += '?EMAIL=' + self.test_first_user.email + '&START_DATE=' + str(test_START_DATE) + '&END_DATE=' + str(test_END_DATE)
+
+        # Calling function responsible for extra computations
+        response = self.client.get(
+            url_summedtransactions
+        )
+
+        # Validating the response
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+
+        decodedResponse = json.loads(response.content.decode('utf-8'))
+
+        '''
+        Double-checking the existence
+        of needed fields
+        '''
+        self.assertTrue(
+            'total_value' in decodedResponse
+        )
+
+        self.assertTrue(
+            'number_of_transactions' in decodedResponse
+        )
+
+        self.assertEqual(
+            decodedResponse['number_of_transactions'],
+            3
+        )
+
+        self.assertEqual(
+            decodedResponse['total_value'],
+            transferValue*3
+        )
+
+
+
+    def test_three_transactions_connected_with_given_user_only_one_of_them_in_proper_data_frame(self):
+        # summedtransactions FUNCTION
+        transferValue = 10.0
+        test_ratio = 1.1
+        statusOfTheTransaction = "[('Processed', 'Processed')]"
+        url_summedtransactions = reverse('api:transactions-summedtransactions')
+
+        # Making sure user has enough funds
+        queriedSenderBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedRecipientBalance = ClientBalance.objects.filter(
+            balanceOwner=self.test_first_user_client_object[0],
+            balanceCurrency=self.queriedCurrencies[0]
+        )
+
+        queriedSenderBalance.update(
+            balanceValue=transferValue
+        )
+
+        # Making sure that the balance of the second user exists & equals 0
+        self.assertEqual(
+            queriedRecipientBalance.count(),
+            1
+        )
+        self.assertEqual(
+            queriedRecipientBalance[0].balanceValue,
+            transferValue
+        )
+
+        '''
+            Creating base ratio relation
+            In order to enable the algorithm
+            to convert currencies
+        '''
+        CurrencyRatio.objects.create(
+            fromCurrency=self.queriedCurrencies[0],
+            toCurrency=self.queriedCurrencies[0],
+            ratio=test_ratio
+        )
+
+        test_payload = {
+            "fromCurrency": self.queriedCurrencies[0].abbreviation,
+            "toCurrency": self.queriedCurrencies[0].abbreviation,
+            "recipient": self.test_first_user.email,
+            "value": transferValue
+        }
+
+        # Creating a request
+        for x in range(3):
+            response = self.client.post(
+                self.url,
+                data=test_payload,
+                format='json',
+                HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+            )
+
+            self.assertEqual(response.status_code, 200)
+
+
+        test_START_DATE = datetime.datetime.strptime(
+            "22 Aug 2000"
+            ,
+            "%d %b %Y"
+        )
+
+        test_creation_date_of_the_transaction = datetime.datetime.strptime(
+            "23 Aug 2019"
+            ,
+            "%d %b %Y"
+        )
+
+        test_END_DATE = datetime.datetime.strptime(
+            "24 Aug 2000"
+            ,
+            "%d %b %Y"
+        )
+
+        queriedTransactions = Transaction.objects.filter(
+            recipient=self.test_first_user_client_object
+        )
+
+        if(queriedTransactions.count() > 0):
+            queriedTransactions.update(
+                created_at=test_creation_date_of_the_transaction
+            )
+
+        # Building up the data for extra computations
+        url_summedtransactions += '?EMAIL=' + self.test_first_user.email + '&START_DATE=' + str(test_START_DATE) + '&END_DATE=' + str(test_END_DATE)
+
+        # Calling function responsible for extra computations
+        response = self.client.get(
+            url_summedtransactions
+        )
+
+        # Validating the response
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+
+        decodedResponse = json.loads(
+            response.content.decode('utf-8')
+        )
+
+        '''
+        Double-checking the existence
+        of needed fields
+        '''
+        self.assertTrue(
+            'total_value' in decodedResponse
+        )
+
+        self.assertTrue(
+            'number_of_transactions' in decodedResponse
+        )
+
+        self.assertEqual(
+            decodedResponse['number_of_transactions'],
+            3
+        )
+
+        self.assertEqual(
+            decodedResponse['total_value'],
+            transferValue*3
+        )
+
+
