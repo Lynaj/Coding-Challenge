@@ -2,12 +2,12 @@ from locust import HttpLocust, TaskSet
 from random import randrange
 import json
 
-def register(l):
-    l.client.post("/api/v1/users/register/", {"email": l.randomizedField, "password": l.randomizedField, "repeatPassword": l.randomizedField, "firstName": l.randomizedField,
-     "lastName": l.randomizedField})
+# def register(l):
+#     l.client.post("/api/v1/users/register/", {"email": l.randomizedField, "password": l.randomizedField, "repeatPassword": l.randomizedField, "firstName": l.randomizedField,
+#      "lastName": l.randomizedField})
 
-def login(l):
-    auth_response = l.client.post("/api/v1/auth/obtain_token/", {"email": l.randomizedField, "password": l.randomizedField})
+def computational_function_invoke(l):
+    auth_response = l.client.get("//api/v1/transactions/summedtransactions/?EMAIL=")
     auth_token = json.loads(auth_response.text)['token']
     l.token = 'Bearer ' + auth_token
 
