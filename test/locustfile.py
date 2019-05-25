@@ -105,7 +105,7 @@ class UserBehavior(TaskSet):
 
     @task(1)
     def computational_function_invoke(l):
-        auth_response = l.client.get("/api/v1/transactions/summedtransactions/?EMAIL=ada@wp.pl")
+        auth_response = l.client.get("/api/v1/transactions/summedtransactions/?EMAIL=test@test.test")
 
 class WebsiteUser(HttpLocust):
     task_set = UserBehavior

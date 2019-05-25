@@ -16,7 +16,8 @@ services:
     entrypoint: /entrypoint.sh
     restart: on-failure
     env_file: .env
-
+    networks:
+    - backend_network
   locust:
     build:
       context: ./test
@@ -26,10 +27,11 @@ services:
       - backend
     volumes:
       - ./test:/app_test
-    command: locust --host=http://localhost:8000
+    command: locust --host=localhost:8000
     restart: on-failure
     env_file: .env
-
+    networks:
+      - backend_network
   frontend:
     depends_on:
       - backend
@@ -48,6 +50,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file: .env
+    networks:
+      - backend_network
 
   nginx:
     image: nginx:alpine
@@ -55,9 +59,13 @@ services:
       - "8000:80"
     depends_on:
       - backend
+    networks:
+      - backend_network
     volumes:
       - ./backend/media/:/media/
       - ./backend/staticfiles/:/staticfiles/
-      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
-    logging:
-      driver: none
+      - ./nginx/test.conf:/etc/nginx/nginx.conf:ro
+
+networks:
+  backend_network:
+    driver: bridge
