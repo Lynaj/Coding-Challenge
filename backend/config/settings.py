@@ -27,23 +27,13 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'django_celery_beat',
     'rest_framework',
     'corsheaders',
-    'django_extensions',
-    'rest_framework.authtoken',
-    'rest_framework_filters'
+    'rest_framework.authtoken'
 ]
 
-LOCAL_APPS = [
-    'apps.users',
-    'apps.transactions',
-    'apps.currencies',
-    'apps.clients'
-]
+LOCAL_APPS = []
 
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # MIDDLEWARE CONFIGURATION
@@ -68,16 +58,12 @@ SECRET_KEY = env.str('SECRET_KEY')
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 DOMAIN = env.str('DOMAIN')
 
-# EMAIL CONFIGURATION
-# ------------------------------------------------------------------------------
-EMAIL_PORT = env.int('EMAIL_PORT', default='1025')
-EMAIL_HOST = env.str('EMAIL_HOST', default='mailhog')
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [
-    ('Arthur Drozdzyk', 'arturdrozdzyk@gmail.com'),
+    ('Administrator', 'admin@happybox.com'),
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -205,13 +191,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # AUTHENTICATION CONFIGURATION
 # ------------------------------------------------------------------------------
 AUTHENTICATION_BACKENDS = [
-
-    'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
 ]
-
-# Custom user app defaults
-# Select the correct user model
-AUTH_USER_MODEL = 'users.User'
 
 
 # DJANGO REST FRAMEWORK
@@ -245,17 +226,6 @@ REST_FRAMEWORK = {
 }
 
 
-# raven sentry client
-# See https://docs.sentry.io/clients/python/integrations/django/
-INSTALLED_APPS += ['raven.contrib.django.raven_compat']
-RAVEN_MIDDLEWARE = [
-    'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware']
-MIDDLEWARE = RAVEN_MIDDLEWARE + MIDDLEWARE
-
-# Sentry Configuration
-SENTRY_DSN = env.str('SENTRY_DSN')
-SENTRY_CLIENT = 'raven.contrib.django.raven_compat.DjangoClient'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -272,14 +242,6 @@ LOGGING = {
     },
 }
 
-RAVEN_CONFIG = {
-    'DSN': SENTRY_DSN
-}
-
-
-GOOGLE_INVISIBLE_RECAPTCHA_SECRET_KEY = ""
-
-
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -289,11 +251,3 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:8000',
     '*'
 )
-
-# JWT
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-    'JWT_EXPIRATION_DELTA': timedelta(hours=10),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
-}

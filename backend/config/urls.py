@@ -18,6 +18,5 @@ urlpatterns = [
     url(r'^api/v1/auth/verify_token/', verify_jwt_token, name='api-jwt-verify'),
     url(r'^api/v1/auth/refresh_token/', refresh_jwt_token, name='api-jwt-refresh'),  
 
-
     path('api/v1/', include((api.urls, 'api')))
 ]
