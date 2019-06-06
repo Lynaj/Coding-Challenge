@@ -5,10 +5,10 @@
 sudo apt-get update
 sudo apt-get install build-essential
 
-
 #### Installing Brew
 ```
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+sudo apt-get install linuxbrew-wrapper
 test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
 test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
@@ -19,7 +19,13 @@ echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 
 ```
 brew install certbot
+sudo apt install certbot
 ```
+
+#### Installing AWS-CLI
+```
+sudo snap install aws-cli --classic
+sudo apt install aws-cli
 
 #### Creating hook script
 ```
@@ -52,16 +58,14 @@ wget https://gist.githubusercontent.com/li0nel/4563f8d909e808169c91a5521569ff10/
 >In the same directory, execute the below command, after replacing your_domain.com by your actual domain name and the email by your appropriate email address. Note that this will generate a certificate both for your_domain.com and www.your_domain.com. You can add as many subdomains AFAIK however Let’s Encrypt does not support wildcard certificates.
 ```
 certbot certonly --non-interactive --manual \
-  --manual-auth-hook "./auth-hook.sh UPSERT your_domain.com" \
-  --manual-cleanup-hook "./auth-hook.sh DELETE your_domain.com" \
   --preferred-challenge dns \
   --config-dir "./letsencrypt" \
   --work-dir "./letsencrypt" \
   --logs-dir "./letsencrypt" \
   --agree-tos \
   --manual-public-ip-logging-ok \
-  --domains your_domain.com,www.your_domain.com \
---email your@email.com
+  --domains happybox.com,www.happybox.com \
+--email admin@happybox.com
 ```
 
 >This might take a couple minutes, but eventually your certificates will be created in a /letsencrypt directory.
