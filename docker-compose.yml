@@ -1,4 +1,4 @@
-version: '3.3'
+version: '1.0'
 
 volumes:
     postgres_data: {}
@@ -16,16 +16,6 @@ services:
     entrypoint: /entrypoint.sh
     restart: on-failure
     env_file: .env
-
-  frontend:
-    image: node:10-alpine
-    command: npm run dev
-    volumes:
-      - ./.env:/app/.env:ro
-      - ./frontend:/app
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-    working_dir: /app
-    restart: on-failure
 
   postgres:
     image: postgres:10-alpine
