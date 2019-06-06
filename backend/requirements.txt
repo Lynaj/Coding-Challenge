@@ -3,3 +3,14 @@ decorator
 Django
 gunicorn
 idna
+psycopg2-binary
+urllib3
+requests
+pytz
+pexpect
+parso
+django-environ
+pandas
+django-cors-headers
+Werkzeug
+django-extensions

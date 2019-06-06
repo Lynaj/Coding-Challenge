@@ -27,9 +27,8 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'rest_framework',
     'corsheaders',
-    'rest_framework.authtoken'
+    'django_extensions'
 ]
 
 LOCAL_APPS = []
@@ -195,37 +194,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-# DJANGO REST FRAMEWORK
-# ------------------------------------------------------------------------------
-REST_FRAMEWORK = {
-    'UPLOADED_FILES_USE_URL': False,
-    'DEFAULT_FILTER_BACKENDS': (
-        'rest_framework_filters.backends.DjangoFilterBackend',
-    ),
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication'
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAdminUser',
-        'rest_framework.permissions.IsAuthenticated'
-    ],
-    'TEST_REQUEST_RENDERER_CLASSES': (
-        'rest_framework.renderers.MultiPartRenderer',
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.TemplateHTMLRenderer'
-    ),
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser',
-        'rest_framework.parsers.FileUploadParser'
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 1000
-}
-
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -248,6 +216,5 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     # TODO - set this properly for production
     'http://127.0.0.1:8080',
-    'http://127.0.0.1:8000',
-    '*'
+    'http://127.0.0.1:8000'
 )
